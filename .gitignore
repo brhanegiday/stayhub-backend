@@ -1,0 +1,50 @@
+
+/node_modules
+/jspm_packages/
+/web_modules/
+
+# Logs and debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Production deployment and build artifacts
+# These folders contain compiled or minified versions of your code.
+/dist
+/build
+/coverage
+
+# Environment variables
+# This file contains sensitive information like API keys and passwords.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Coverage reports from testing tools like Istanbul
+coverage/
+.nyc_output/
+
+# Optional cache folders
+.eslintcache
+.cache
+
+# =====================================================================================
+# OS and IDE-specific files
+# =====================================================================================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains IDEs (WebStorm, etc.)
+.idea/
+
