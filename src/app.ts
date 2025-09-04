@@ -59,7 +59,6 @@ app.get("/api/health", (req, res) => {
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error(err.stack);
-
     res.status(err.status || 500).json({
         success: false,
         message: err.message || "Internal Server Error",
@@ -67,8 +66,8 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     });
 });
 
-// Handle 404 routes
-app.use("*", (req, res) => {
+// Handle 404 routes - catch all unmatched routes
+app.use((req, res) => {
     res.status(404).json({
         success: false,
         message: "API endpoint not found",
