@@ -1,24 +1,12 @@
 import { Request, Response } from "express";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 
-export interface AuthenticatedRequest extends Request {
-    user?: IUser;
-}
-
 const generateToken = (userId: string): string => {
-    const secret = process.env.JWT_SECRET as string;
-    const JWT_EXPIRE = (process.env.JWT_EXPIRE || "7d") as "7d" | "1h" | "30m";
+    const secret = process.env.JWT_SECRET!;
+    const jwtExpire = process.env.JWT_EXPIRE || "7d";
 
-    if (!secret) {
-        throw new Error("JWT_SECRET environment variable is not defined");
-    }
-
-    const options: SignOptions = {
-        expiresIn: JWT_EXPIRE,
-    };
-
-    return jwt.sign({ userId }, secret, options);
+    return jwt.sign({ userId }, secret, { expiresIn: jwtExpire as any });
 };
 
 export const googleAuth = async (req: Request, res: Response) => {
@@ -107,7 +95,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     }
 };
 
-export const getMe = async (req: AuthenticatedRequest, res: Response) => {
+export const getMe = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
@@ -143,7 +131,7 @@ export const getMe = async (req: AuthenticatedRequest, res: Response) => {
     }
 };
 
-export const updateProfile = async (req: AuthenticatedRequest, res: Response) => {
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { phone, bio } = req.body;
@@ -183,7 +171,7 @@ export const updateProfile = async (req: AuthenticatedRequest, res: Response) =>
     }
 };
 
-export const logout = async (req: AuthenticatedRequest, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     res.status(200).json({
         success: true,
         message: "Logged out successfully",

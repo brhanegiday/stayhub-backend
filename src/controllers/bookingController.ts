@@ -2,9 +2,8 @@
 import { Request, Response } from "express";
 import Booking, { IBooking } from "../models/Booking";
 import Property from "../models/Property";
-import { AuthenticatedRequest } from "./authController";
 
-export const createBooking = async (req: AuthenticatedRequest, res: Response) => {
+export const createBooking = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
@@ -129,7 +128,7 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response) =>
     }
 };
 
-export const getUserBookings = async (req: AuthenticatedRequest, res: Response) => {
+export const getUserBookings = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { status, page = 1, limit = 10 } = req.query;
@@ -191,7 +190,7 @@ export const getUserBookings = async (req: AuthenticatedRequest, res: Response) 
     }
 };
 
-export const updateBookingStatus = async (req: AuthenticatedRequest, res: Response) => {
+export const updateBookingStatus = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { id } = req.params;
@@ -281,7 +280,7 @@ export const updateBookingStatus = async (req: AuthenticatedRequest, res: Respon
     }
 };
 
-export const getBooking = async (req: AuthenticatedRequest, res: Response) => {
+export const getBooking = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { id } = req.params;
@@ -334,7 +333,7 @@ export const getBooking = async (req: AuthenticatedRequest, res: Response) => {
     }
 };
 
-export const cancelBooking = async (req: AuthenticatedRequest, res: Response) => {
+export const cancelBooking = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { id } = req.params;

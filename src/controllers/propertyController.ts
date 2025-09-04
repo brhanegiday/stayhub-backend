@@ -2,9 +2,8 @@
 import { Request, Response } from "express";
 import Property, { IProperty } from "../models/Property";
 import Booking from "../models/Booking";
-import { AuthenticatedRequest } from "./authController";
 
-export const createProperty = async (req: AuthenticatedRequest, res: Response) => {
+export const createProperty = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
@@ -153,7 +152,7 @@ export const getProperty = async (req: Request, res: Response) => {
     }
 };
 
-export const updateProperty = async (req: AuthenticatedRequest, res: Response) => {
+export const updateProperty = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { id } = req.params;
@@ -194,7 +193,7 @@ export const updateProperty = async (req: AuthenticatedRequest, res: Response) =
     }
 };
 
-export const deleteProperty = async (req: AuthenticatedRequest, res: Response) => {
+export const deleteProperty = async (req: Request, res: Response) => {
     try {
         const user = req.user;
         const { id } = req.params;
@@ -245,7 +244,7 @@ export const deleteProperty = async (req: AuthenticatedRequest, res: Response) =
     }
 };
 
-export const getHostProperties = async (req: AuthenticatedRequest, res: Response) => {
+export const getHostProperties = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
