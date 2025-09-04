@@ -1,17 +1,18 @@
-// src/controllers/bookingController.ts
 import { Request, Response } from "express";
 import Booking, { IBooking } from "../models/Booking";
 import Property from "../models/Property";
+import { IUser } from "../models/User";
 
-export const createBooking = async (req: Request, res: Response) => {
+export const createBooking = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
 
         if (!user || user.role !== "renter") {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Only renters can create bookings",
             });
+            return;
         }
 
         const { propertyId, checkInDate, checkOutDate, numberOfGuests, specialRequests } = req.body;
@@ -22,42 +23,47 @@ export const createBooking = async (req: Request, res: Response) => {
         const today = new Date();
 
         if (checkIn < today) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Check-in date cannot be in the past",
             });
+            return;
         }
 
         if (checkIn >= checkOut) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Check-out date must be after check-in date",
             });
+            return;
         }
 
         // Get property details
         const property = await Property.findById(propertyId);
         if (!property) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Property not found",
             });
+            return;
         }
 
         // Check if property is active
         if (!property.isActive) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Property is not available for booking",
             });
+            return;
         }
 
         // Check max guests
         if (numberOfGuests > property.maxGuests) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: `Maximum ${property.maxGuests} guests allowed`,
             });
+            return;
         }
 
         // Check for conflicts (double booking prevention)
@@ -81,10 +87,11 @@ export const createBooking = async (req: Request, res: Response) => {
         });
 
         if (conflictingBooking) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Property is not available for the selected dates",
             });
+            return;
         }
 
         // Calculate total price
@@ -128,16 +135,17 @@ export const createBooking = async (req: Request, res: Response) => {
     }
 };
 
-export const getUserBookings = async (req: Request, res: Response) => {
+export const getUserBookings = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { status, page = 1, limit = 10 } = req.query;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         const query: any = {};
@@ -190,25 +198,27 @@ export const getUserBookings = async (req: Request, res: Response) => {
     }
 };
 
-export const updateBookingStatus = async (req: Request, res: Response) => {
+export const updateBookingStatus = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { id } = req.params;
         const { status, cancellationReason } = req.body;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         const booking = await Booking.findById(id);
         if (!booking) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Booking not found",
             });
+            return;
         }
 
         // Check permissions
@@ -216,10 +226,11 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
         const isRenter = user.role === "renter" && booking.renterId.toString() === user._id.toString();
 
         if (!isHost && !isRenter) {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "You do not have permission to modify this booking",
             });
+            return;
         }
 
         // Validate status transitions
@@ -231,18 +242,20 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
         };
 
         if (!validTransitions[booking.status].includes(status)) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: `Cannot change status from ${booking.status} to ${status}`,
             });
+            return;
         }
 
         // Only hosts can confirm bookings
         if (status === "confirmed" && !isHost) {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Only hosts can confirm bookings",
             });
+            return;
         }
 
         // Update booking
@@ -280,16 +293,17 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
     }
 };
 
-export const getBooking = async (req: Request, res: Response) => {
+export const getBooking = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { id } = req.params;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         const booking = await Booking.findById(id).populate([
@@ -302,10 +316,11 @@ export const getBooking = async (req: Request, res: Response) => {
         ]);
 
         if (!booking) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Booking not found",
             });
+            return;
         }
 
         // Check permissions
@@ -313,10 +328,11 @@ export const getBooking = async (req: Request, res: Response) => {
         const isRenter = user.role === "renter" && booking.renterId.toString() === user._id.toString();
 
         if (!isHost && !isRenter) {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "You do not have permission to view this booking",
             });
+            return;
         }
 
         res.status(200).json({
@@ -333,25 +349,27 @@ export const getBooking = async (req: Request, res: Response) => {
     }
 };
 
-export const cancelBooking = async (req: Request, res: Response) => {
+export const cancelBooking = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { id } = req.params;
         const { cancellationReason } = req.body;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         const booking = await Booking.findById(id);
         if (!booking) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Booking not found",
             });
+            return;
         }
 
         // Check permissions
@@ -359,25 +377,28 @@ export const cancelBooking = async (req: Request, res: Response) => {
         const isRenter = user.role === "renter" && booking.renterId.toString() === user._id.toString();
 
         if (!isHost && !isRenter) {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "You do not have permission to cancel this booking",
             });
+            return;
         }
 
         // Check if booking can be canceled
         if (booking.status === "canceled") {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Booking is already canceled",
             });
+            return;
         }
 
         if (booking.status === "completed") {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Cannot cancel completed booking",
             });
+            return;
         }
 
         // Update booking

@@ -10,6 +10,7 @@ import connectDB from "./config/database";
 import authRoutes from "./routes/auth";
 import propertyRoutes from "./routes/properties";
 import bookingRoutes from "./routes/bookings";
+import userRoutes from "./routes/users";
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +44,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/users", userRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

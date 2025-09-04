@@ -1,17 +1,18 @@
-// src/controllers/propertyController.ts
 import { Request, Response } from "express";
 import Property, { IProperty } from "../models/Property";
 import Booking from "../models/Booking";
+import { IUser } from "../models/User";
 
-export const createProperty = async (req: Request, res: Response) => {
+export const createProperty = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
 
         if (!user || user.role !== "host") {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Only hosts can create properties",
             });
+            return;
         }
 
         const propertyData = {
@@ -39,7 +40,7 @@ export const createProperty = async (req: Request, res: Response) => {
     }
 };
 
-export const getProperties = async (req: Request, res: Response) => {
+export const getProperties = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
             page = 1,
@@ -115,17 +116,18 @@ export const getProperties = async (req: Request, res: Response) => {
     }
 };
 
-export const getProperty = async (req: Request, res: Response) => {
+export const getProperty = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
 
         const property = await Property.findById(id).populate("host", "name avatar bio phone isVerified createdAt");
 
         if (!property) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Property not found",
             });
+            return;
         }
 
         // Get existing bookings for availability calendar
@@ -152,25 +154,27 @@ export const getProperty = async (req: Request, res: Response) => {
     }
 };
 
-export const updateProperty = async (req: Request, res: Response) => {
+export const updateProperty = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { id } = req.params;
 
         if (!user || user.role !== "host") {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Only hosts can update properties",
             });
+            return;
         }
 
         const property = await Property.findOne({ _id: id, hostId: user._id });
 
         if (!property) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Property not found or you do not have permission to update it",
             });
+            return;
         }
 
         const updatedProperty = await Property.findByIdAndUpdate(id, req.body, {
@@ -193,25 +197,27 @@ export const updateProperty = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteProperty = async (req: Request, res: Response) => {
+export const deleteProperty = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { id } = req.params;
 
         if (!user || user.role !== "host") {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Only hosts can delete properties",
             });
+            return;
         }
 
         const property = await Property.findOne({ _id: id, hostId: user._id });
 
         if (!property) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "Property not found or you do not have permission to delete it",
             });
+            return;
         }
 
         // Check if property has active bookings
@@ -222,10 +228,11 @@ export const deleteProperty = async (req: Request, res: Response) => {
         });
 
         if (activeBookings > 0) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Cannot delete property with active bookings",
             });
+            return;
         }
 
         await Property.findByIdAndDelete(id);
@@ -244,15 +251,16 @@ export const deleteProperty = async (req: Request, res: Response) => {
     }
 };
 
-export const getHostProperties = async (req: Request, res: Response) => {
+export const getHostProperties = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
 
         if (!user || user.role !== "host") {
-            return res.status(403).json({
+            res.status(403).json({
                 success: false,
                 message: "Access denied",
             });
+            return;
         }
 
         const properties = await Property.find({ hostId: user._id }).sort({ createdAt: -1 });

@@ -9,24 +9,26 @@ const generateToken = (userId: string): string => {
     return jwt.sign({ userId }, secret, { expiresIn: jwtExpire as any });
 };
 
-export const googleAuth = async (req: Request, res: Response) => {
+export const googleAuth = async (req: Request, res: Response): Promise<void> => {
     try {
         const { googleId, email, name, avatar, role } = req.body;
 
         // Validate required fields
         if (!googleId || !email || !name || !avatar || !role) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: "Missing required fields",
             });
+            return;
         }
 
         // Validate role
         if (!["renter", "host"].includes(role)) {
-            return res.status(400).json({
+            res.status(400).json({
                 success: false,
                 message: 'Invalid role. Must be either "renter" or "host"',
             });
+            return;
         }
 
         // Check if user already exists
@@ -36,7 +38,7 @@ export const googleAuth = async (req: Request, res: Response) => {
             // User exists, generate token and return user data
             const token = generateToken(user._id.toString());
 
-            return res.status(200).json({
+            res.status(200).json({
                 success: true,
                 message: "Login successful",
                 data: {
@@ -53,6 +55,7 @@ export const googleAuth = async (req: Request, res: Response) => {
                     token,
                 },
             });
+            return;
         }
 
         // Create new user
@@ -95,15 +98,16 @@ export const googleAuth = async (req: Request, res: Response) => {
     }
 };
 
-export const getMe = async (req: Request, res: Response) => {
+export const getMe = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         res.status(200).json({
@@ -131,16 +135,17 @@ export const getMe = async (req: Request, res: Response) => {
     }
 };
 
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = req.user;
+        const user = req.user as IUser;
         const { phone, bio } = req.body;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Not authenticated",
             });
+            return;
         }
 
         const updatedUser = await User.findByIdAndUpdate(user._id, { phone, bio }, { new: true, runValidators: true });
@@ -171,7 +176,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     }
 };
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
         success: true,
         message: "Logged out successfully",

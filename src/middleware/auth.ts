@@ -1,44 +1,46 @@
-// src/middleware/auth.ts
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Access token required",
             });
+            return;
         }
 
         const token = authHeader.split(" ")[1];
 
         if (!token) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Access token required",
             });
+            return;
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
 
-        const user = await User.findById(decoded.userId);
+        const user = await User.findById(decoded.userId) as IUser | null;
 
         if (!user) {
-            return res.status(401).json({
+            res.status(401).json({
                 success: false,
                 message: "Invalid access token",
             });
+            return;
         }
 
         req.user = user;
         next();
     } catch (error) {
         console.error("Auth middleware error:", error);
-        return res.status(401).json({
+        res.status(401).json({
             success: false,
             message: "Invalid access token",
         });
@@ -46,19 +48,22 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const requireRole = (roles: string[]) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        if (!req.user) {
-            return res.status(401).json({
+    return (req: Request, res: Response, next: NextFunction): void => {
+        const user = req.user as IUser;
+        if (!user) {
+            res.status(401).json({
                 success: false,
                 message: "Authentication required",
             });
+            return;
         }
 
-        if (!roles.includes(req.user.role)) {
-            return res.status(403).json({
+        if (!roles.includes(user.role)) {
+            res.status(403).json({
                 success: false,
                 message: "Insufficient permissions",
             });
+            return;
         }
 
         next();
