@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Property, { IProperty } from "../models/Property";
 import Booking from "../models/Booking";
+import Property from "../models/Property";
 import { IUser } from "../models/User";
 
 export const createProperty = async (req: Request, res: Response): Promise<void> => {

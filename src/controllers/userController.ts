@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
-import Property from "../models/Property";
 import Booking from "../models/Booking";
+import Property from "../models/Property";
+import User, { IUser } from "../models/User";
 
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {

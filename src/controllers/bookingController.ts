@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Booking, { IBooking } from "../models/Booking";
+import Booking from "../models/Booking";
 import Property from "../models/Property";
 import { IUser } from "../models/User";
 

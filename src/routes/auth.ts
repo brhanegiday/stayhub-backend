@@ -1,8 +1,7 @@
-// src/routes/auth.ts
 import express from "express";
-import { googleAuth, getMe, updateProfile, logout } from "../controllers/authController";
-import { validateGoogleAuth } from "../middleware/validation";
+import { getMe, googleAuth, logout, updateProfile } from "../controllers/authController";
 import { authenticate } from "../middleware/auth";
+import { validateGoogleAuth } from "../middleware/validation";
 
 const router = express.Router();
 

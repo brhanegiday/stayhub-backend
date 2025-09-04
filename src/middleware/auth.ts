@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 
@@ -26,7 +26,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
 
-        const user = await User.findById(decoded.userId) as IUser | null;
+        const user = (await User.findById(decoded.userId)) as IUser | null;
 
         if (!user) {
             res.status(401).json({

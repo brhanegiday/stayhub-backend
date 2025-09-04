@@ -11,7 +11,11 @@
     "clean": "rm -rf dist",
     "lint": "echo \"Add linting configuration if needed\"",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"Add testing framework if needed\""
+    "test": "echo \"Add testing framework if needed\"",
+    "seed": "ts-node src/scripts/seedData.ts",
+    "seed:quick": "ts-node src/scripts/quickSeed.ts",
+    "seed:verify": "ts-node src/scripts/verifyData.ts",
+    "seed:prod": "node dist/scripts/seedData.js"
   },
   "keywords": [],
   "author": "",

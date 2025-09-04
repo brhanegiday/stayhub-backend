@@ -185,6 +185,13 @@ Properties can be filtered by:
 - `npm run typecheck` - Type checking without build
 - `npm run clean` - Remove build directory
 
+### 🌱 Database Seeding Scripts
+
+- `npm run seed` - Populate database with comprehensive sample data (10 users, 8 properties, 15 bookings)
+- `npm run seed:quick` - Quick seeding with minimal test data
+- `npm run seed:verify` - Verify and display database contents
+- `npm run seed:prod` - Production seeding (requires built project)
+
 ## 🚀 Deployment
 
 1. **Build the application**

@@ -1,10 +1,10 @@
 import express from "express";
 import {
+    cancelBooking,
     createBooking,
+    getBooking,
     getUserBookings,
     updateBookingStatus,
-    getBooking,
-    cancelBooking,
 } from "../controllers/bookingController";
 import { authenticate, requireRole } from "../middleware/auth";
 import { validateBooking } from "../middleware/validation";

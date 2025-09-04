@@ -1,11 +1,11 @@
 import express from "express";
 import {
     createProperty,
+    deleteProperty,
+    getHostProperties,
     getProperties,
     getProperty,
     updateProperty,
-    deleteProperty,
-    getHostProperties,
 } from "../controllers/propertyController";
 import { authenticate, requireRole } from "../middleware/auth";
 import { validateProperty } from "../middleware/validation";
