@@ -30,66 +30,65 @@ export const validatePropertyId = mongoIdValidator("id");
 
 export const validatePropertyFilters = [
     query("city")
+        .optional()
         .trim()
         .isLength({ min: 2, max: 50 })
-        .custom((value, { req }) => {
-            if (!value) return true; // optional field
-            return true;
-        }),
+        .withMessage("City must be between 2 and 50 characters"),
     query("country")
+        .optional()
         .trim()
         .isLength({ min: 2, max: 50 })
+        .withMessage("Country must be between 2 and 50 characters"),
+    query("minPrice")
+        .optional()
         .custom((value, { req }) => {
-            if (!value) return true; // optional field
+            const numValue = parseFloat(value);
+            if (isNaN(numValue) || numValue < 0) {
+                throw new Error("minPrice must be a positive number");
+            }
             return true;
         }),
-    query("minPrice").custom((value, { req }) => {
-        if (!value) return true; // optional field
-        const numValue = parseFloat(value);
-        if (isNaN(numValue) || numValue < 0) {
-            throw new Error("minPrice must be a positive number");
-        }
-        return true;
-    }),
-    query("maxPrice").custom((value, { req }) => {
-        if (!value) return true; // optional field
-        const numValue = parseFloat(value);
-        if (isNaN(numValue) || numValue < 0) {
-            throw new Error("maxPrice must be a positive number");
-        }
-        return true;
-    }),
-    query("propertyType").custom((value, { req }) => {
-        if (!value) return true; // optional field
-        const validTypes = ["apartment", "house", "villa", "condo", "studio"];
-        if (!validTypes.includes(value)) {
-            throw new Error("Invalid property type");
-        }
-        return true;
-    }),
-    query("bedrooms").custom((value, { req }) => {
-        if (!value) return true; // optional field
-        const numValue = parseInt(value);
-        if (isNaN(numValue) || numValue < 1) {
-            throw new Error("bedrooms must be a positive integer");
-        }
-        return true;
-    }),
-    query("maxGuests").custom((value, { req }) => {
-        if (!value) return true; // optional field
-        const numValue = parseInt(value);
-        if (isNaN(numValue) || numValue < 1) {
-            throw new Error("maxGuests must be a positive integer");
-        }
-        return true;
-    }),
+    query("maxPrice")
+        .optional()
+        .custom((value, { req }) => {
+            const numValue = parseFloat(value);
+            if (isNaN(numValue) || numValue < 0) {
+                throw new Error("maxPrice must be a positive number");
+            }
+            return true;
+        }),
+    query("propertyType")
+        .optional()
+        .custom((value, { req }) => {
+            const validTypes = ["apartment", "house", "villa", "condo", "studio"];
+            if (!validTypes.includes(value)) {
+                throw new Error("Invalid property type");
+            }
+            return true;
+        }),
+    query("bedrooms")
+        .optional()
+        .custom((value, { req }) => {
+            const numValue = parseInt(value);
+            if (isNaN(numValue) || numValue < 1) {
+                throw new Error("bedrooms must be a positive integer");
+            }
+            return true;
+        }),
+    query("maxGuests")
+        .optional()
+        .custom((value, { req }) => {
+            const numValue = parseInt(value);
+            if (isNaN(numValue) || numValue < 1) {
+                throw new Error("maxGuests must be a positive integer");
+            }
+            return true;
+        }),
     query("search")
+        .optional()
         .trim()
         .isLength({ min: 2, max: 100 })
-        .custom((value, { req }) => {
-            if (!value) return true; // optional field
-            return true;
-        }),
+        .withMessage("Search must be between 2 and 100 characters"),
     ...paginationValidators,
 ];
 
@@ -183,7 +182,8 @@ export const validatePhoneNumber = (field: string, required: boolean = false) =>
             throw new Error("Phone number is required");
         }
         // Basic phone number validation - checks for numbers and common phone formats
-        const phonePattern = /^[\+]?[1-9][\d]{0,15}$/;
+        // Requires at least 7 digits for a valid phone number
+        const phonePattern = /^[\+]?[1-9][\d]{6,15}$/;
         if (!phonePattern.test(value.replace(/[\s\-\(\)]/g, ""))) {
             throw new Error("Valid phone number is required");
         }

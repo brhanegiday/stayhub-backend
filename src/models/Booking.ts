@@ -128,8 +128,8 @@ BookingSchema.virtual("host", {
 
 // Virtual for number of nights
 BookingSchema.virtual("numberOfNights").get(function () {
-    const diffTime = Math.abs(this.checkOutDate.getTime() - this.checkInDate.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffTime = this.checkOutDate.getTime() - this.checkInDate.getTime();
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
 });
 
 // Pre-save validation to ensure dates are valid

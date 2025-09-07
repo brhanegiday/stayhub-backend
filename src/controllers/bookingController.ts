@@ -401,6 +401,20 @@ export const cancelBooking = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
+        // Check if cancellation is within 24 hours of check-in
+        const checkInTime = new Date(booking.checkInDate).getTime();
+        const currentTime = Date.now();
+        const timeDifference = checkInTime - currentTime;
+        const hoursUntilCheckIn = timeDifference / (1000 * 60 * 60);
+
+        if (hoursUntilCheckIn < 24 && hoursUntilCheckIn > 0) {
+            res.status(400).json({
+                success: false,
+                message: "Cannot cancel booking within 24 hours of check-in",
+            });
+            return;
+        }
+
         // Update booking
         const updatedBooking = await Booking.findByIdAndUpdate(
             id,

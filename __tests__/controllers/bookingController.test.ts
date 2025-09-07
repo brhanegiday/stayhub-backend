@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { createBooking, getUserBookings } from "../../src/controllers/bookingController";
+import {
+    createBooking,
+    getUserBookings,
+    updateBookingStatus,
+    getBooking,
+    cancelBooking,
+} from "../../src/controllers/bookingController";
 import Booking from "../../src/models/Booking";
 import Property from "../../src/models/Property";
 import mongoose from "mongoose";
@@ -396,6 +402,406 @@ describe("Booking Controller", () => {
             });
 
             await getUserBookings(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(500);
+        });
+    });
+
+    describe("updateBookingStatus", () => {
+        const mockUser = {
+            _id: new mongoose.Types.ObjectId(),
+            role: "host",
+        };
+
+        const mockBooking = {
+            _id: new mongoose.Types.ObjectId(),
+            hostId: mockUser._id,
+            renterId: new mongoose.Types.ObjectId(),
+            status: "pending",
+            property: {
+                _id: new mongoose.Types.ObjectId(),
+                title: "Test Property",
+            },
+            host: {
+                _id: mockUser._id,
+                name: "Test Host",
+            },
+            renter: {
+                _id: new mongoose.Types.ObjectId(),
+                name: "Test Renter",
+            },
+        };
+
+        beforeEach(() => {
+            mockReq = {
+                user: mockUser,
+                params: { id: mockBooking._id.toString() },
+                body: { status: "confirmed" },
+            };
+
+            // Mock findByIdAndUpdate with populate chaining
+            MockBooking.findByIdAndUpdate.mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ ...mockBooking, status: "confirmed" }),
+            } as any);
+        });
+
+        it("should successfully update booking status", async () => {
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(MockBooking.findById).toHaveBeenCalledWith(mockBooking._id.toString());
+            expect(MockBooking.findByIdAndUpdate).toHaveBeenCalled();
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should fail if user is not authenticated", async () => {
+            mockReq.user = undefined;
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(401);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Not authenticated",
+            });
+        });
+
+        it("should fail if booking is not found", async () => {
+            MockBooking.findById.mockResolvedValue(null);
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(404);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Booking not found",
+            });
+        });
+
+        it("should fail if user does not have permission", async () => {
+            const differentUser = {
+                _id: new mongoose.Types.ObjectId(),
+                role: "host",
+            };
+            mockReq.user = differentUser;
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(403);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "You do not have permission to modify this booking",
+            });
+        });
+
+        it("should fail for invalid status transitions", async () => {
+            const completedBooking = { ...mockBooking, status: "completed" };
+            MockBooking.findById.mockResolvedValue(completedBooking);
+            mockReq.body = { status: "canceled" };
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(400);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Cannot change status from completed to canceled",
+            });
+        });
+
+        it("should allow renter to update their booking", async () => {
+            const renterUser = { _id: mockBooking.renterId, role: "renter" };
+            mockReq.user = renterUser;
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            // Mock findByIdAndUpdate for cancellation
+            MockBooking.findByIdAndUpdate.mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ ...mockBooking, status: "canceled" }),
+            } as any);
+
+            mockReq.body = { status: "canceled" };
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should handle cancellation with reason", async () => {
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            // Mock findByIdAndUpdate for cancellation with reason
+            MockBooking.findByIdAndUpdate.mockReturnValue({
+                populate: jest.fn().mockResolvedValue({
+                    ...mockBooking,
+                    status: "canceled",
+                    cancellationReason: "Emergency",
+                }),
+            } as any);
+
+            mockReq.body = { status: "canceled", cancellationReason: "Emergency" };
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            // Since we're using findByIdAndUpdate, we check the mock was called
+            expect(MockBooking.findByIdAndUpdate).toHaveBeenCalled();
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should handle database errors", async () => {
+            MockBooking.findById.mockRejectedValue(new Error("Database error"));
+
+            await updateBookingStatus(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(500);
+        });
+    });
+
+    describe("getBooking", () => {
+        const mockUser = {
+            _id: new mongoose.Types.ObjectId(),
+            role: "host",
+        };
+
+        const mockBooking = {
+            _id: new mongoose.Types.ObjectId(),
+            hostId: mockUser._id,
+            renterId: new mongoose.Types.ObjectId(),
+            status: "confirmed",
+        };
+
+        beforeEach(() => {
+            mockReq = {
+                user: mockUser,
+                params: { id: mockBooking._id.toString() },
+            };
+        });
+
+        it("should successfully get booking details", async () => {
+            const populateChain = {
+                populate: jest.fn().mockResolvedValue(mockBooking),
+            };
+            MockBooking.findById.mockReturnValue(populateChain as any);
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(MockBooking.findById).toHaveBeenCalledWith(mockBooking._id.toString());
+            expect(statusMock).toHaveBeenCalledWith(200);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: true,
+                data: { booking: mockBooking },
+            });
+        });
+
+        it("should fail if user is not authenticated", async () => {
+            mockReq.user = undefined;
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(401);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Not authenticated",
+            });
+        });
+
+        it("should fail if booking is not found", async () => {
+            const populateChain = {
+                populate: jest.fn().mockResolvedValue(null),
+            };
+            MockBooking.findById.mockReturnValue(populateChain as any);
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(404);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Booking not found",
+            });
+        });
+
+        it("should fail if user does not have permission", async () => {
+            const differentUser = {
+                _id: new mongoose.Types.ObjectId(),
+                role: "host",
+            };
+            mockReq.user = differentUser;
+            const populateChain = {
+                populate: jest.fn().mockResolvedValue(mockBooking),
+            };
+            MockBooking.findById.mockReturnValue(populateChain as any);
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(403);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "You do not have permission to view this booking",
+            });
+        });
+
+        it("should allow renter to view their booking", async () => {
+            const renterUser = { _id: mockBooking.renterId, role: "renter" };
+            mockReq.user = renterUser;
+            const populateChain = {
+                populate: jest.fn().mockResolvedValue(mockBooking),
+            };
+            MockBooking.findById.mockReturnValue(populateChain as any);
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should handle database errors", async () => {
+            MockBooking.findById.mockImplementation(() => {
+                throw new Error("Database error");
+            });
+
+            await getBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(500);
+        });
+    });
+
+    describe("cancelBooking", () => {
+        const mockUser = {
+            _id: new mongoose.Types.ObjectId(),
+            role: "renter",
+        };
+
+        const mockBooking = {
+            _id: new mongoose.Types.ObjectId(),
+            hostId: new mongoose.Types.ObjectId(),
+            renterId: mockUser._id,
+            status: "confirmed",
+            checkInDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        };
+
+        beforeEach(() => {
+            mockReq = {
+                user: mockUser,
+                params: { id: mockBooking._id.toString() },
+                body: { cancellationReason: "Change of plans" },
+            };
+
+            // Mock findByIdAndUpdate with populate chain for cancelBooking
+            MockBooking.findByIdAndUpdate.mockReturnValue({
+                populate: jest.fn().mockResolvedValue({
+                    ...mockBooking,
+                    status: "canceled",
+                    cancellationReason: "Change of plans",
+                }),
+            } as any);
+        });
+
+        it("should successfully cancel booking", async () => {
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(MockBooking.findById).toHaveBeenCalledWith(mockBooking._id.toString());
+            expect(MockBooking.findByIdAndUpdate).toHaveBeenCalled();
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should fail if user is not authenticated", async () => {
+            mockReq.user = undefined;
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(401);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Not authenticated",
+            });
+        });
+
+        it("should fail if booking is not found", async () => {
+            MockBooking.findById.mockResolvedValue(null);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(404);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Booking not found",
+            });
+        });
+
+        it("should fail if user does not have permission", async () => {
+            const differentUser = {
+                _id: new mongoose.Types.ObjectId(),
+                role: "renter",
+            };
+            mockReq.user = differentUser;
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(403);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "You do not have permission to cancel this booking",
+            });
+        });
+
+        it("should fail if booking is already canceled", async () => {
+            const canceledBooking = { ...mockBooking, status: "canceled" };
+            MockBooking.findById.mockResolvedValue(canceledBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(400);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Booking is already canceled",
+            });
+        });
+
+        it("should fail if booking is completed", async () => {
+            const completedBooking = { ...mockBooking, status: "completed" };
+            MockBooking.findById.mockResolvedValue(completedBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(400);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Cannot cancel completed booking",
+            });
+        });
+
+        it("should fail if cancellation is within 24 hours of check-in", async () => {
+            const tomorrowBooking = {
+                ...mockBooking,
+                checkInDate: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours from now
+            };
+            MockBooking.findById.mockResolvedValue(tomorrowBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(400);
+            expect(jsonMock).toHaveBeenCalledWith({
+                success: false,
+                message: "Cannot cancel booking within 24 hours of check-in",
+            });
+        });
+
+        it("should allow host to cancel their booking", async () => {
+            const hostUser = { _id: mockBooking.hostId, role: "host" };
+            mockReq.user = hostUser;
+            MockBooking.findById.mockResolvedValue(mockBooking);
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
+
+            expect(statusMock).toHaveBeenCalledWith(200);
+        });
+
+        it("should handle database errors", async () => {
+            MockBooking.findById.mockRejectedValue(new Error("Database error"));
+
+            await cancelBooking(mockReq as Request, mockRes as Response);
 
             expect(statusMock).toHaveBeenCalledWith(500);
         });

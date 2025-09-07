@@ -346,7 +346,7 @@ describe("Booking Model", () => {
             const bookingData = { ...validBookingData, propertyId, renterId, hostId };
             const booking = new Booking(bookingData);
             expect(booking.toObject()).toHaveProperty("numberOfNights");
-            expect((booking as any).numberOfNights).toBe(2); // 2 days difference
+            expect((booking as any).numberOfNights).toBe(1); // 1 night: tomorrow to day after tomorrow
         });
 
         it("should calculate numberOfNights correctly for longer stays", () => {
@@ -423,7 +423,7 @@ describe("Booking Model", () => {
             const bookingJSON = booking.toJSON();
 
             expect(bookingJSON).toHaveProperty("numberOfNights");
-            expect((bookingJSON as any).numberOfNights).toBe(2);
+            expect((bookingJSON as any).numberOfNights).toBe(1);
 
             // Reference virtuals are undefined unless populated
             expect((bookingJSON as any).property).toBeUndefined();
