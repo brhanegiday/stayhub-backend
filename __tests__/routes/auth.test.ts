@@ -8,6 +8,17 @@ import jwt from "jsonwebtoken";
 jest.mock("../../src/models/User");
 jest.mock("jsonwebtoken");
 
+// Mock rate limiter to prevent rate limiting in tests
+jest.mock("../../src/middleware/rateLimiter", () => ({
+    authLimiter: (req: any, res: any, next: any) => next(),
+    generalLimiter: (req: any, res: any, next: any) => next(),
+    speedLimiter: (req: any, res: any, next: any) => next(),
+    propertyLimiter: (req: any, res: any, next: any) => next(),
+    bookingLimiter: (req: any, res: any, next: any) => next(),
+    uploadLimiter: (req: any, res: any, next: any) => next(),
+    trustProxy: false,
+}));
+
 const MockUser = User as jest.Mocked<typeof User>;
 const mockJwt = jwt as jest.Mocked<typeof jwt>;
 

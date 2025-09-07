@@ -2,13 +2,14 @@ import express from "express";
 import { getMe, googleAuth, logout, updateProfile } from "../controllers/authController";
 import { authenticate } from "../middleware/auth";
 import { validateGoogleAuth } from "../middleware/validation";
+import { authLimiter } from "../middleware/rateLimiter";
 
 const router = express.Router();
 
 // @route   POST /api/auth/google
 // @desc    Authenticate with Google OAuth
 // @access  Public
-router.post("/google", validateGoogleAuth, googleAuth);
+router.post("/google", authLimiter, validateGoogleAuth, googleAuth);
 
 // @route   GET /api/auth/me
 // @desc    Get current user

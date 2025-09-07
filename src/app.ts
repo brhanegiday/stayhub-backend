@@ -5,6 +5,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import connectDB from "./config/database";
+import logger from "./utils/logger";
+import { generalLimiter, speedLimiter, trustProxy } from "./middleware/rateLimiter";
 
 // Import routes
 import authRoutes from "./routes/auth";
@@ -20,8 +22,17 @@ connectDB();
 
 const app = express();
 
+// Trust proxy for rate limiting (if behind reverse proxy)
+if (trustProxy) {
+    app.set('trust proxy', trustProxy);
+}
+
 // Security middleware
 app.use(helmet());
+
+// Rate limiting middleware
+app.use(generalLimiter);
+app.use(speedLimiter);
 
 // CORS configuration
 app.use(
@@ -35,10 +46,21 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Logging middleware
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-}
+// Enhanced logging middleware
+const morganFormat = process.env.NODE_ENV === "development" ? "dev" : "combined";
+app.use(
+    morgan(morganFormat, {
+        stream: {
+            write: (message: string) => logger.http(message.trim())
+        }
+    })
+);
+
+// Log all requests
+app.use((req, res, next) => {
+    logger.info(`${req.method} ${req.originalUrl} - IP: ${req.ip}`);
+    next();
+});
 
 // API Routes
 app.use("/api/auth", authRoutes);
@@ -56,10 +78,21 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-// Global error handler
+// Global error handler with enhanced logging
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack);
-    res.status(err.status || 500).json({
+    const statusCode = err.status || 500;
+    
+    // Log error with context
+    logger.error(`${statusCode} - ${err.message} - ${req.originalUrl} - ${req.method} - IP: ${req.ip}`, {
+        error: err.message,
+        stack: err.stack,
+        url: req.originalUrl,
+        method: req.method,
+        ip: req.ip,
+        userAgent: req.get('User-Agent'),
+    });
+
+    res.status(statusCode).json({
         success: false,
         message: err.message || "Internal Server Error",
         ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
@@ -68,6 +101,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Handle 404 routes - catch all unmatched routes
 app.use((req, res) => {
+    logger.warn(`404 - Route not found: ${req.originalUrl} - ${req.method} - IP: ${req.ip}`);
     res.status(404).json({
         success: false,
         message: "API endpoint not found",
@@ -77,7 +111,8 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
+    logger.info(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
+    logger.info(`🔒 Security features enabled: Rate limiting, File validation, Structured logging`);
 });
 
 export default app;

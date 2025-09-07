@@ -8,6 +8,7 @@ import {
 } from "../controllers/bookingController";
 import { authenticate, requireRole } from "../middleware/auth";
 import { validateBooking } from "../middleware/validation";
+import { bookingLimiter } from "../middleware/rateLimiter";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.get("/:id", authenticate, getBooking);
 // @route   POST /api/bookings
 // @desc    Create new booking
 // @access  Private (Renter only)
-router.post("/", authenticate, requireRole(["renter"]), validateBooking, createBooking);
+router.post("/", bookingLimiter, authenticate, requireRole(["renter"]), validateBooking, createBooking);
 
 // @route   PUT /api/bookings/:id/status
 // @desc    Update booking status

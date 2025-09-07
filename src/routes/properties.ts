@@ -9,6 +9,7 @@ import {
 } from "../controllers/propertyController";
 import { authenticate, requireRole } from "../middleware/auth";
 import { validateProperty } from "../middleware/validation";
+import { propertyLimiter } from "../middleware/rateLimiter";
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ router.get("/:id", getProperty);
 // @route   POST /api/properties
 // @desc    Create new property
 // @access  Private (Host only)
-router.post("/", authenticate, requireRole(["host"]), validateProperty, createProperty);
+router.post("/", propertyLimiter, authenticate, requireRole(["host"]), validateProperty, createProperty);
 
 // @route   PUT /api/properties/:id
 // @desc    Update property
