@@ -34,5 +34,6 @@ export const extractTokenFromHeader = (authHeader: string): string | null => {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return null;
     }
-    return authHeader.split(" ")[1];
+    const parts = authHeader.split(" ");
+    return parts.length >= 2 ? parts.slice(1).join(" ").trim() : null;
 };

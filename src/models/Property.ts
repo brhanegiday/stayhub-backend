@@ -65,16 +65,20 @@ const PropertySchema = new Schema<IProperty>(
                 trim: true,
             },
             coordinates: {
-                lat: Number,
-                lng: Number,
+                lat: { type: Number },
+                lng: { type: Number },
             },
         },
-        images: [
-            {
-                type: String,
-                required: true,
+        images: {
+            type: [String],
+            required: true,
+            validate: {
+                validator: function (arr: string[]) {
+                    return arr && arr.length > 0;
+                },
+                message: "At least one image is required",
             },
-        ],
+        },
         amenities: [
             {
                 type: String,

@@ -67,23 +67,23 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
             role,
         });
 
-        await user.save();
+        const savedUser = await user.save();
 
-        const token = generateToken(user._id.toString());
+        const token = generateToken(savedUser._id.toString());
 
         res.status(201).json({
             success: true,
             message: "User registered successfully",
             data: {
                 user: {
-                    id: user._id,
-                    email: user.email,
-                    name: user.name,
-                    avatar: user.avatar,
-                    role: user.role,
-                    phone: user.phone,
-                    bio: user.bio,
-                    isVerified: user.isVerified,
+                    id: savedUser._id,
+                    email: savedUser.email,
+                    name: savedUser.name,
+                    avatar: savedUser.avatar,
+                    role: savedUser.role,
+                    phone: savedUser.phone,
+                    bio: savedUser.bio,
+                    isVerified: savedUser.isVerified,
                 },
                 token,
             },
