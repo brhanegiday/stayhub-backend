@@ -1,35 +1,40 @@
 import { Request, Response } from 'express';
 import { googleAuth, getMe, updateProfile, logout } from '../../src/controllers/authController';
 import User from '../../src/models/User';
-import jwt from 'jsonwebtoken';
 
-// Mock JWT
-jest.mock('jsonwebtoken');
-const mockJwt = jwt as jest.Mocked<typeof jwt>;
+// Mock the JWT utilities
+jest.mock('../../src/utils/jwt', () => ({
+  generateTokenPair: jest.fn().mockReturnValue({
+    accessToken: 'mock-access-token',
+    refreshToken: 'mock-refresh-token'
+  })
+}));
 
 describe('Auth Controller', () => {
   let mockReq: Partial<Request>;
   let mockRes: Partial<Response>;
   let statusMock: jest.Mock;
   let jsonMock: jest.Mock;
+  let clearCookieMock: jest.Mock;
 
   beforeEach(() => {
     statusMock = jest.fn().mockReturnThis();
     jsonMock = jest.fn().mockReturnThis();
+    clearCookieMock = jest.fn().mockReturnThis();
 
     mockRes = {
       status: statusMock,
       json: jsonMock,
+      clearCookie: clearCookieMock,
     };
 
     // Mock environment variables
     process.env.JWT_SECRET = 'test-secret';
-    process.env.JWT_EXPIRE = '7d';
+    process.env.JWT_EXPIRE = '15m';
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    mockJwt.sign.mockClear();
   });
 
   describe('googleAuth', () => {
@@ -45,7 +50,6 @@ describe('Auth Controller', () => {
       mockReq = {
         body: validAuthData,
       };
-      mockJwt.sign.mockReturnValue('mock-jwt-token' as any);
     });
 
     it('should register a new user successfully', async () => {
@@ -53,17 +57,30 @@ describe('Auth Controller', () => {
       jest.spyOn(User, 'findOne').mockResolvedValue(null);
 
       // Mock User constructor and save
-      const mockUser = {
+      const mockSavedUser = {
         _id: 'user123',
         ...validAuthData,
+        authProvider: 'google',
         isVerified: false,
+        twoFactorEnabled: false,
+        lastLogin: expect.any(Date),
         save: jest.fn().mockResolvedValue({
           _id: 'user123',
           ...validAuthData,
+          authProvider: 'google',
           isVerified: false,
+          twoFactorEnabled: false,
+          lastLogin: expect.any(Date),
         }),
       };
-      jest.spyOn(User.prototype, 'save').mockResolvedValue(mockUser as any);
+
+      // Mock the User constructor
+      const mockUserInstance = {
+        ...mockSavedUser,
+        save: jest.fn().mockResolvedValue(mockSavedUser),
+      };
+
+      jest.spyOn(User.prototype, 'save').mockResolvedValue(mockSavedUser as any);
 
       await googleAuth(mockReq as Request, mockRes as Response);
 
@@ -72,13 +89,20 @@ describe('Auth Controller', () => {
         success: true,
         message: 'User registered successfully',
         data: {
-          user: expect.objectContaining({
+          user: {
+            id: 'user123',
             email: validAuthData.email,
             name: validAuthData.name,
+            avatar: validAuthData.avatar,
             role: validAuthData.role,
+            phone: undefined,
+            bio: undefined,
             isVerified: false,
-          }),
-          token: 'mock-jwt-token',
+            authProvider: 'google',
+            lastLogin: expect.any(Date),
+          },
+          accessToken: 'mock-access-token',
+          refreshToken: 'mock-refresh-token',
         },
       });
     });
@@ -87,7 +111,16 @@ describe('Auth Controller', () => {
       const existingUser = {
         _id: 'user123',
         ...validAuthData,
+        authProvider: 'google',
         isVerified: true,
+        lastLogin: new Date(),
+        save: jest.fn().mockResolvedValue({
+          _id: 'user123',
+          ...validAuthData,
+          authProvider: 'google',
+          isVerified: true,
+          lastLogin: expect.any(Date),
+        }),
       };
 
       // Mock User.findOne to return existing user
@@ -100,13 +133,20 @@ describe('Auth Controller', () => {
         success: true,
         message: 'Login successful',
         data: {
-          user: expect.objectContaining({
+          user: {
             id: 'user123',
             email: validAuthData.email,
             name: validAuthData.name,
+            avatar: validAuthData.avatar,
             role: validAuthData.role,
-          }),
-          token: 'mock-jwt-token',
+            phone: undefined,
+            bio: undefined,
+            isVerified: true,
+            authProvider: 'google',
+            lastLogin: expect.any(Date),
+          },
+          accessToken: 'mock-access-token',
+          refreshToken: 'mock-refresh-token',
         },
       });
     });
@@ -161,6 +201,26 @@ describe('Auth Controller', () => {
         error: 'Database connection error',
       });
     });
+
+    it('should prevent duplicate account with same email different provider', async () => {
+      // First check for existing Google user - returns null
+      // Second check for existing user with same email - returns existing user
+      jest.spyOn(User, 'findOne')
+        .mockResolvedValueOnce(null) // First call for googleId check
+        .mockResolvedValueOnce({ // Second call for email check
+          _id: 'existing123',
+          email: validAuthData.email,
+          authProvider: 'local',
+        } as any);
+
+      await googleAuth(mockReq as Request, mockRes as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'An account with this email already exists. Please use the existing login method or link your Google account.',
+      });
+    });
   });
 
   describe('getMe', () => {
@@ -173,6 +233,8 @@ describe('Auth Controller', () => {
       phone: '+1234567890',
       bio: 'Test bio',
       isVerified: true,
+      authProvider: 'local',
+      lastLogin: new Date(),
     };
 
     beforeEach(() => {
@@ -310,10 +372,31 @@ describe('Auth Controller', () => {
     it('should logout successfully', async () => {
       await logout(mockReq as Request, mockRes as Response);
 
+      expect(clearCookieMock).toHaveBeenCalledWith('refreshToken', {
+        httpOnly: true,
+        secure: false, // Since NODE_ENV is not 'production' in test
+        sameSite: 'strict'
+      });
       expect(statusMock).toHaveBeenCalledWith(200);
       expect(jsonMock).toHaveBeenCalledWith({
         success: true,
         message: 'Logged out successfully',
+      });
+    });
+
+    it('should handle errors during logout', async () => {
+      // Mock clearCookie to throw an error
+      clearCookieMock.mockImplementation(() => {
+        throw new Error('Cookie error');
+      });
+
+      await logout(mockReq as Request, mockRes as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(500);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'Logout failed',
+        error: 'Cookie error',
       });
     });
   });

@@ -53,3 +53,62 @@
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-07 17:08:15:815"}
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-07 17:08:15:815"}
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-07 17:08:15:815"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 08:03:02:32"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 08:03:02:32"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 10:52:59:5259"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 10:59:26:5926"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 11:57:17:5717"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 12:34:59:3459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 12:50:49:5049"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 12:55:41:5541"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:09:30:930"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12&search=los+angeles - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:11:00:110"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:24:29:2429"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:27:45:2745"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:41:22:4122"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:41:48:4148"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:44:03:443"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:44:36:4436"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 13:44:55:4455"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-13 14:03:41:341"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-13 15:08:33:833"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:04:03:43"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:04:03:43"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:23:20:2320"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:23:20:2320"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:23:20:2320"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:23:20:2320"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:31:19:3119"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:31:19:3119"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:34:53:3453"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:34:53:3453"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:35:12:3512"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:35:12:3512"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:38:09:389"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:38:10:3810"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:38:10:3810"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:38:10:3810"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:40:01:401"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:40:01:401"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:43:31:4331"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:43:31:4331"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:44:03:443"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:44:04:444"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-13 21:46:03:463"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-13 21:46:03:463"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:47:45:4745"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:47:45:4745"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:47:45:4745"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 21:47:45:4745"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:32:08:328"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:32:08:328"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:32:08:328"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:32:08:328"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:34:50:3450"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:34:51:3451"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:34:51:3451"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:34:51:3451"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}

@@ -21,10 +21,10 @@ export const generalLimiter = rateLimit({
     },
 });
 
-// Strict rate limiter for authentication endpoints
+// Rate limiter for authentication endpoints
 export const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 5, // Limit each IP to 5 login attempts per windowMs
+    limit: 10, // Limit each IP to 10 auth attempts per windowMs
     message: {
         success: false,
         message: "Too many authentication attempts, please try again later.",
@@ -35,6 +35,24 @@ export const authLimiter = rateLimit({
         res.status(429).json({
             success: false,
             message: "Too many authentication attempts, please try again later.",
+        });
+    },
+});
+
+// Strict rate limiter for sensitive operations (forgot password, etc.)
+export const strictAuthLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 3, // Limit each IP to 3 sensitive operations per windowMs
+    message: {
+        success: false,
+        message: "Too many requests for this operation, please try again later.",
+    },
+    skipSuccessfulRequests: false, // Don't skip successful requests for sensitive operations
+    handler: (req, res) => {
+        logger.warn(`Strict auth rate limit exceeded for IP: ${req.ip} on ${req.originalUrl}`);
+        res.status(429).json({
+            success: false,
+            message: "Too many requests for this operation, please try again later.",
         });
     },
 });

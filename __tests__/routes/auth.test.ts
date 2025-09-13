@@ -2,11 +2,16 @@ import request from "supertest";
 import express from "express";
 import authRoutes from "../../src/routes/auth";
 import User from "../../src/models/User";
-import jwt from "jsonwebtoken";
+import * as jwtUtils from '../../src/utils/jwt';
 
 // Mock dependencies
 jest.mock("../../src/models/User");
-jest.mock("jsonwebtoken");
+jest.mock('../../src/utils/jwt');
+jest.mock('../../src/utils/email', () => ({
+    sendEmailVerification: jest.fn(),
+    sendPasswordReset: jest.fn(),
+    sendPasswordChanged: jest.fn(),
+}));
 
 // Mock rate limiter to prevent rate limiting in tests
 jest.mock("../../src/middleware/rateLimiter", () => ({
@@ -16,11 +21,12 @@ jest.mock("../../src/middleware/rateLimiter", () => ({
     propertyLimiter: (req: any, res: any, next: any) => next(),
     bookingLimiter: (req: any, res: any, next: any) => next(),
     uploadLimiter: (req: any, res: any, next: any) => next(),
+    strictAuthLimiter: (req: any, res: any, next: any) => next(),
     trustProxy: false,
 }));
 
 const MockUser = User as jest.Mocked<typeof User>;
-const mockJwt = jwt as jest.Mocked<typeof jwt>;
+const mockJwtUtils = jwtUtils as jest.Mocked<typeof jwtUtils>;
 
 describe("Auth Routes", () => {
     let app: express.Application;
@@ -31,7 +37,11 @@ describe("Auth Routes", () => {
         app.use("/auth", authRoutes);
 
         process.env.JWT_SECRET = "test-secret";
-        process.env.JWT_EXPIRE = "7d";
+        process.env.JWT_EXPIRE = "15m";
+        process.env.JWT_REFRESH_SECRET = "refresh-secret";
+        process.env.JWT_REFRESH_EXPIRE = "30d";
+        process.env.NODEMAILER_USER = "test@stayhub.com";
+        process.env.NODEMAILER_PASS = "test-pass";
 
         jest.clearAllMocks();
     });
@@ -39,6 +49,10 @@ describe("Auth Routes", () => {
     afterEach(() => {
         delete process.env.JWT_SECRET;
         delete process.env.JWT_EXPIRE;
+        delete process.env.JWT_REFRESH_SECRET;
+        delete process.env.JWT_REFRESH_EXPIRE;
+        delete process.env.NODEMAILER_USER;
+        delete process.env.NODEMAILER_PASS;
     });
 
     describe("POST /auth/google", () => {
@@ -56,16 +70,25 @@ describe("Auth Routes", () => {
             const mockUser = {
                 _id: "user123",
                 ...validGoogleAuthData,
+                authProvider: 'google',
                 isVerified: false,
+                twoFactorEnabled: false,
+                lastLogin: new Date(),
                 save: jest.fn().mockResolvedValue({
                     _id: "user123",
                     ...validGoogleAuthData,
+                    authProvider: 'google',
                     isVerified: false,
+                    twoFactorEnabled: false,
+                    lastLogin: expect.any(Date),
                 }),
             };
 
             jest.spyOn(User.prototype, "save").mockResolvedValue(mockUser as any);
-            mockJwt.sign.mockReturnValue("mock-jwt-token" as any);
+            mockJwtUtils.generateTokenPair.mockReturnValue({
+                accessToken: "mock-access-token",
+                refreshToken: "mock-refresh-token"
+            });
 
             const response = await request(app).post("/auth/google").send(validGoogleAuthData);
 
@@ -79,8 +102,10 @@ describe("Auth Routes", () => {
                         email: validGoogleAuthData.email,
                         name: validGoogleAuthData.name,
                         role: validGoogleAuthData.role,
+                        authProvider: 'google',
                     }),
-                    token: "mock-jwt-token",
+                    accessToken: "mock-access-token",
+                    refreshToken: "mock-refresh-token",
                 },
             });
         });
@@ -89,11 +114,23 @@ describe("Auth Routes", () => {
             const existingUser = {
                 _id: "user123",
                 ...validGoogleAuthData,
+                authProvider: 'google',
                 isVerified: true,
+                lastLogin: new Date(),
+                save: jest.fn().mockResolvedValue({
+                    _id: "user123",
+                    ...validGoogleAuthData,
+                    authProvider: 'google',
+                    isVerified: true,
+                    lastLogin: expect.any(Date),
+                }),
             };
 
             MockUser.findOne.mockResolvedValue(existingUser as any);
-            mockJwt.sign.mockReturnValue("mock-jwt-token" as any);
+            mockJwtUtils.generateTokenPair.mockReturnValue({
+                accessToken: "mock-access-token",
+                refreshToken: "mock-refresh-token"
+            });
 
             const response = await request(app).post("/auth/google").send(validGoogleAuthData);
 
@@ -105,8 +142,10 @@ describe("Auth Routes", () => {
                     user: expect.objectContaining({
                         id: "user123",
                         email: validGoogleAuthData.email,
+                        authProvider: 'google',
                     }),
-                    token: "mock-jwt-token",
+                    accessToken: "mock-access-token",
+                    refreshToken: "mock-refresh-token",
                 },
             });
         });
@@ -207,10 +246,16 @@ describe("Auth Routes", () => {
                 email: "test@example.com",
                 name: "John Doe",
                 role: "renter",
+                avatar: 'https://example.com/avatar.jpg',
+                phone: '+1234567890',
+                bio: 'Test bio',
+                isVerified: true,
             };
 
-            MockUser.findById.mockResolvedValue(mockUser as any);
-            mockJwt.verify.mockReturnValue({ userId: "user123" } as any);
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "user123" } as any);
 
             const response = await request(app).get("/auth/me").set("Authorization", "Bearer valid-token");
 
@@ -221,23 +266,33 @@ describe("Auth Routes", () => {
                     user: expect.objectContaining({
                         id: "user123",
                         email: "test@example.com",
+                        name: "John Doe",
+                        role: "renter",
+                        avatar: 'https://example.com/avatar.jpg',
+                        phone: '+1234567890',
+                        bio: 'Test bio',
+                        isVerified: true,
                     }),
                 },
             });
         });
 
         it("should return 401 for missing token", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
             const response = await request(app).get("/auth/me");
 
             expect(response.status).toBe(401);
             expect(response.body).toEqual({
                 success: false,
                 message: "Access token required",
+                code: "TOKEN_MISSING",
             });
         });
 
         it("should return 401 for invalid token", async () => {
-            mockJwt.verify.mockImplementation(() => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('invalid-token');
+            mockJwtUtils.verifyAccessToken.mockImplementation(() => {
                 throw new Error("Invalid token");
             });
 
@@ -247,6 +302,7 @@ describe("Auth Routes", () => {
             expect(response.body).toEqual({
                 success: false,
                 message: "Invalid access token",
+                code: "TOKEN_INVALID",
             });
         });
     });
@@ -263,13 +319,19 @@ describe("Auth Routes", () => {
                 email: "test@example.com",
                 name: "John Doe",
                 role: "renter",
+                avatar: 'https://example.com/avatar.jpg',
+                phone: '+0987654321',
+                bio: 'Old bio',
+                isVerified: true,
             };
 
             const updatedUser = { ...mockUser, ...updateData };
 
-            MockUser.findById.mockResolvedValue(mockUser as any);
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
             MockUser.findByIdAndUpdate.mockResolvedValue(updatedUser as any);
-            mockJwt.verify.mockReturnValue({ userId: "user123" } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "user123" } as any);
 
             const response = await request(app)
                 .put("/auth/profile")
@@ -282,6 +344,7 @@ describe("Auth Routes", () => {
                 message: "Profile updated successfully",
                 data: {
                     user: expect.objectContaining({
+                        id: "user123",
                         phone: updateData.phone,
                         bio: updateData.bio,
                     }),
@@ -290,9 +353,16 @@ describe("Auth Routes", () => {
         });
 
         it("should return 401 for unauthenticated user", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
             const response = await request(app).put("/auth/profile").send(updateData);
 
             expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Access token required",
+                code: "TOKEN_MISSING",
+            });
         });
     });
 
@@ -303,10 +373,13 @@ describe("Auth Routes", () => {
                 email: "test@example.com",
                 name: "John Doe",
                 role: "renter",
+                isVerified: true,
             };
 
-            MockUser.findById.mockResolvedValue(mockUser as any);
-            mockJwt.verify.mockReturnValue({ userId: "user123" } as any);
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "user123" } as any);
 
             const response = await request(app).post("/auth/logout").set("Authorization", "Bearer valid-token");
 
@@ -314,6 +387,158 @@ describe("Auth Routes", () => {
             expect(response.body).toEqual({
                 success: true,
                 message: "Logged out successfully",
+            });
+        });
+
+        it("should return 401 for unauthenticated user", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
+            const response = await request(app).post("/auth/logout");
+
+            expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Access token required",
+                code: "TOKEN_MISSING",
+            });
+        });
+    });
+
+    describe("POST /auth/register", () => {
+        const validRegistrationData = {
+            email: "newuser@example.com",
+            password: "SecurePass123!",
+            name: "New User",
+            role: "renter",
+        };
+
+        it("should register new user successfully", async () => {
+            MockUser.findOne.mockResolvedValue(null);
+
+            const mockSavedUser = {
+                _id: "user123",
+                email: validRegistrationData.email,
+                name: validRegistrationData.name,
+                role: validRegistrationData.role,
+                authProvider: 'local',
+                isVerified: false,
+            };
+
+            const mockUserInstance = {
+                _id: "user123",
+                email: validRegistrationData.email,
+                name: validRegistrationData.name,
+                role: validRegistrationData.role,
+                authProvider: 'local',
+                isVerified: false,
+                generateEmailVerificationToken: jest.fn().mockReturnValue('verification-token'),
+                save: jest.fn().mockResolvedValue(mockSavedUser),
+            };
+
+            // Mock the User constructor
+            (User as any).mockImplementation(() => mockUserInstance);
+
+            const response = await request(app).post("/auth/register").send(validRegistrationData);
+
+            expect(response.status).toBe(201);
+            expect(response.body).toEqual({
+                success: true,
+                message: "User registered successfully. Please check your email to verify your account.",
+                data: {
+                    user: expect.objectContaining({
+                        id: "user123",
+                        email: validRegistrationData.email,
+                        name: validRegistrationData.name,
+                        role: validRegistrationData.role,
+                        authProvider: 'local',
+                        isVerified: false,
+                    }),
+                },
+            });
+        });
+
+        it("should return 400 for existing user", async () => {
+            MockUser.findOne.mockResolvedValue({ _id: "existing-user" } as any);
+
+            const response = await request(app).post("/auth/register").send(validRegistrationData);
+
+            expect(response.status).toBe(400);
+            expect(response.body).toEqual({
+                success: false,
+                message: "User with this email already exists",
+            });
+        });
+    });
+
+    describe("POST /auth/login", () => {
+        const validLoginData = {
+            email: "user@example.com",
+            password: "SecurePass123!",
+        };
+
+        it("should login user successfully", async () => {
+            const mockUser = {
+                _id: "user123",
+                email: validLoginData.email,
+                name: "Test User",
+                role: "renter",
+                avatar: 'https://example.com/avatar.jpg',
+                phone: '+1234567890',
+                bio: 'Test bio',
+                authProvider: 'local',
+                isVerified: true,
+                lastLogin: new Date(),
+                isLocked: jest.fn().mockReturnValue(false),
+                comparePassword: jest.fn().mockResolvedValue(true),
+                updateOne: jest.fn().mockResolvedValue({}),
+            };
+
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findOne = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.generateTokenPair.mockReturnValue({
+                accessToken: "mock-access-token",
+                refreshToken: "mock-refresh-token"
+            });
+
+            const response = await request(app).post("/auth/login").send(validLoginData);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual({
+                success: true,
+                message: "Login successful",
+                data: {
+                    user: expect.objectContaining({
+                        id: "user123",
+                        email: validLoginData.email,
+                        name: "Test User",
+                        role: "renter",
+                        authProvider: 'local',
+                        isVerified: true,
+                    }),
+                    accessToken: "mock-access-token",
+                    refreshToken: "mock-refresh-token",
+                },
+            });
+        });
+
+        it("should return 401 for invalid password", async () => {
+            const mockUser = {
+                _id: "user123",
+                email: validLoginData.email,
+                isLocked: jest.fn().mockReturnValue(false),
+                comparePassword: jest.fn().mockResolvedValue(false),
+                incLoginAttempts: jest.fn(),
+            };
+
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findOne = jest.fn().mockReturnValue({ select: mockSelect } as any);
+
+            const response = await request(app).post("/auth/login").send(validLoginData);
+
+            expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Invalid email or password",
             });
         });
     });

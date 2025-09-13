@@ -3,16 +3,34 @@ import express from "express";
 import propertiesRoutes from "../../src/routes/properties";
 import Property from "../../src/models/Property";
 import User from "../../src/models/User";
-import jwt from "jsonwebtoken";
+import * as jwtUtils from '../../src/utils/jwt';
 
 // Mock dependencies
 jest.mock("../../src/models/Property");
 jest.mock("../../src/models/User");
-jest.mock("jsonwebtoken");
+jest.mock('../../src/utils/jwt');
+
+// Mock rate limiter to prevent rate limiting in tests
+jest.mock("../../src/middleware/rateLimiter", () => ({
+    authLimiter: (req: any, res: any, next: any) => next(),
+    generalLimiter: (req: any, res: any, next: any) => next(),
+    speedLimiter: (req: any, res: any, next: any) => next(),
+    propertyLimiter: (req: any, res: any, next: any) => next(),
+    bookingLimiter: (req: any, res: any, next: any) => next(),
+    uploadLimiter: (req: any, res: any, next: any) => next(),
+    strictAuthLimiter: (req: any, res: any, next: any) => next(),
+    trustProxy: false,
+}));
+
+// Mock cloudinary
+jest.mock('../../src/config/cloudinary', () => ({
+    uploadImage: jest.fn(),
+    deleteImage: jest.fn(),
+}));
 
 const MockProperty = Property as jest.Mocked<typeof Property>;
 const MockUser = User as jest.Mocked<typeof User>;
-const mockJwt = jwt as jest.Mocked<typeof jwt>;
+const mockJwtUtils = jwtUtils as jest.Mocked<typeof jwtUtils>;
 
 describe("Properties Routes", () => {
     let app: express.Application;
@@ -23,11 +41,17 @@ describe("Properties Routes", () => {
         app.use("/properties", propertiesRoutes);
 
         process.env.JWT_SECRET = "test-secret";
+        process.env.JWT_EXPIRE = "15m";
+        process.env.JWT_REFRESH_SECRET = "refresh-secret";
+        process.env.JWT_REFRESH_EXPIRE = "30d";
         jest.clearAllMocks();
     });
 
     afterEach(() => {
         delete process.env.JWT_SECRET;
+        delete process.env.JWT_EXPIRE;
+        delete process.env.JWT_REFRESH_SECRET;
+        delete process.env.JWT_REFRESH_EXPIRE;
     });
 
     describe("GET /properties", () => {
@@ -92,19 +116,27 @@ describe("Properties Routes", () => {
         };
 
         it("should create property for authenticated host", async () => {
-            MockUser.findById.mockResolvedValue(mockHost as any);
-            mockJwt.verify.mockReturnValue({ userId: "host123" } as any);
+            // Mock authentication middleware
+            const mockSelect = jest.fn().mockResolvedValue(mockHost);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "host123" } as any);
+
+            const savedProperty = {
+                _id: "property123",
+                ...validPropertyData,
+                hostId: "host123",
+                isActive: true,
+                averageRating: 0,
+                reviewCount: 0,
+            };
 
             const mockPropertyInstance = {
-                save: jest.fn().mockResolvedValue({
-                    _id: "property123",
-                    title: "Test Property",
-                    hostId: "host123",
-                }),
+                save: jest.fn().mockResolvedValue(savedProperty),
                 populate: jest.fn().mockReturnThis(),
             };
 
-            jest.spyOn(Property.prototype, "save").mockResolvedValue(mockPropertyInstance as any);
+            (Property as any).mockImplementation(() => mockPropertyInstance);
 
             const response = await request(app)
                 .post("/properties")
@@ -116,9 +148,16 @@ describe("Properties Routes", () => {
         });
 
         it("should fail without authentication", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
             const response = await request(app).post("/properties").send(validPropertyData);
 
             expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Access token required",
+                code: "TOKEN_MISSING",
+            });
         });
     });
 });

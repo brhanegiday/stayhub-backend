@@ -4,18 +4,30 @@ import bookingsRoutes from "../../src/routes/bookings";
 import Booking from "../../src/models/Booking";
 import Property from "../../src/models/Property";
 import User from "../../src/models/User";
-import jwt from "jsonwebtoken";
+import * as jwtUtils from '../../src/utils/jwt';
 
 // Mock dependencies
 jest.mock("../../src/models/Booking");
 jest.mock("../../src/models/Property");
 jest.mock("../../src/models/User");
-jest.mock("jsonwebtoken");
+jest.mock('../../src/utils/jwt');
+
+// Mock rate limiter to prevent rate limiting in tests
+jest.mock("../../src/middleware/rateLimiter", () => ({
+    authLimiter: (req: any, res: any, next: any) => next(),
+    generalLimiter: (req: any, res: any, next: any) => next(),
+    speedLimiter: (req: any, res: any, next: any) => next(),
+    propertyLimiter: (req: any, res: any, next: any) => next(),
+    bookingLimiter: (req: any, res: any, next: any) => next(),
+    uploadLimiter: (req: any, res: any, next: any) => next(),
+    strictAuthLimiter: (req: any, res: any, next: any) => next(),
+    trustProxy: false,
+}));
 
 const MockBooking = Booking as jest.Mocked<typeof Booking>;
 const MockProperty = Property as jest.Mocked<typeof Property>;
 const MockUser = User as jest.Mocked<typeof User>;
-const mockJwt = jwt as jest.Mocked<typeof jwt>;
+const mockJwtUtils = jwtUtils as jest.Mocked<typeof jwtUtils>;
 
 describe("Bookings Routes", () => {
     let app: express.Application;
@@ -26,11 +38,17 @@ describe("Bookings Routes", () => {
         app.use("/bookings", bookingsRoutes);
 
         process.env.JWT_SECRET = "test-secret";
+        process.env.JWT_EXPIRE = "15m";
+        process.env.JWT_REFRESH_SECRET = "refresh-secret";
+        process.env.JWT_REFRESH_EXPIRE = "30d";
         jest.clearAllMocks();
     });
 
     afterEach(() => {
         delete process.env.JWT_SECRET;
+        delete process.env.JWT_EXPIRE;
+        delete process.env.JWT_REFRESH_SECRET;
+        delete process.env.JWT_REFRESH_EXPIRE;
     });
 
     describe("POST /bookings", () => {
@@ -55,8 +73,11 @@ describe("Bookings Routes", () => {
         };
 
         it("should create booking for authenticated renter", async () => {
-            MockUser.findById.mockResolvedValue(mockRenter as any);
-            mockJwt.verify.mockReturnValue({ userId: "renter123" } as any);
+            // Mock authentication middleware
+            const mockSelect = jest.fn().mockResolvedValue(mockRenter);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "renter123" } as any);
 
             const mockProperty = {
                 _id: "507f1f77bcf86cd799439011", // Valid MongoDB ObjectId format
@@ -69,16 +90,23 @@ describe("Bookings Routes", () => {
             MockProperty.findById.mockResolvedValue(mockProperty as any);
             MockBooking.findOne.mockResolvedValue(null); // No conflicts
 
+            const savedBooking = {
+                _id: "booking123",
+                propertyId: "507f1f77bcf86cd799439011",
+                renterId: "renter123",
+                checkInDate: validBookingData.checkInDate,
+                checkOutDate: validBookingData.checkOutDate,
+                numberOfGuests: validBookingData.numberOfGuests,
+                totalPrice: 100,
+                status: "pending",
+            };
+
             const mockBookingInstance = {
-                save: jest.fn().mockResolvedValue({
-                    _id: "booking123",
-                    propertyId: "507f1f77bcf86cd799439011",
-                    renterId: "renter123",
-                }),
+                save: jest.fn().mockResolvedValue(savedBooking),
                 populate: jest.fn().mockReturnThis(),
             };
 
-            jest.spyOn(Booking.prototype, "save").mockResolvedValue(mockBookingInstance as any);
+            (Booking as any).mockImplementation(() => mockBookingInstance);
 
             const response = await request(app)
                 .post("/bookings")
@@ -90,9 +118,16 @@ describe("Bookings Routes", () => {
         });
 
         it("should fail without authentication", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
             const response = await request(app).post("/bookings").send(validBookingData);
 
             expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Access token required",
+                code: "TOKEN_MISSING",
+            });
         });
     });
 
@@ -103,8 +138,11 @@ describe("Bookings Routes", () => {
         };
 
         it("should get user bookings", async () => {
-            MockUser.findById.mockResolvedValue(mockUser as any);
-            mockJwt.verify.mockReturnValue({ userId: "user123" } as any);
+            // Mock authentication middleware
+            const mockSelect = jest.fn().mockResolvedValue(mockUser);
+            MockUser.findById = jest.fn().mockReturnValue({ select: mockSelect } as any);
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue('valid-token');
+            mockJwtUtils.verifyAccessToken.mockReturnValue({ userId: "user123" } as any);
 
             const mockBookings = [
                 { _id: "1", propertyId: "prop1" },
@@ -128,9 +166,16 @@ describe("Bookings Routes", () => {
         });
 
         it("should fail without authentication", async () => {
+            mockJwtUtils.extractTokenFromHeader.mockReturnValue(null);
+
             const response = await request(app).get("/bookings");
 
             expect(response.status).toBe(401);
+            expect(response.body).toEqual({
+                success: false,
+                message: "Access token required",
+                code: "TOKEN_MISSING",
+            });
         });
     });
 });

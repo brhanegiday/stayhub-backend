@@ -26,6 +26,8 @@ jest.mock("express-validator", () => ({
         isISO8601: jest.fn().mockReturnThis(),
         toDate: jest.fn().mockReturnThis(),
         optional: jest.fn().mockReturnThis(),
+        matches: jest.fn().mockReturnThis(),
+        isBoolean: jest.fn().mockReturnThis(),
     })),
 }));
 

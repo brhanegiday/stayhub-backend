@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./config/database";
 import logger from "./utils/logger";
@@ -45,6 +46,7 @@ app.use(
 // Body parser middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(cookieParser());
 
 // Enhanced logging middleware
 const morganFormat = process.env.NODE_ENV === "development" ? "dev" : "combined";

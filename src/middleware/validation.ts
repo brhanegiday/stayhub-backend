@@ -16,12 +16,92 @@ export const handleValidationErrors = (req: Request, res: Response, next: NextFu
     next();
 };
 
-// Validation rules for user authentication
+// Validation rules for user registration
+export const validateRegistration = [
+    body("email")
+        .isEmail()
+        .normalizeEmail()
+        .withMessage("Valid email is required")
+        .isLength({ min: 5, max: 100 })
+        .withMessage("Email must be between 5 and 100 characters"),
+    body("password")
+        .isLength({ min: 8, max: 128 })
+        .withMessage("Password must be between 8 and 128 characters")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+        .withMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+    body("name")
+        .trim()
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Name must be between 2 and 50 characters"),
+    body("role")
+        .isIn(["renter", "host"])
+        .withMessage("Role must be either renter or host"),
+    handleValidationErrors,
+];
+
+// Validation rules for user login
+export const validateLogin = [
+    body("email")
+        .isEmail()
+        .normalizeEmail()
+        .withMessage("Valid email is required"),
+    body("password")
+        .notEmpty()
+        .withMessage("Password is required"),
+    body("rememberMe")
+        .optional()
+        .isBoolean()
+        .withMessage("Remember me must be a boolean"),
+    handleValidationErrors,
+];
+
+// Validation rules for forgot password
+export const validateForgotPassword = [
+    body("email")
+        .isEmail()
+        .normalizeEmail()
+        .withMessage("Valid email is required"),
+    handleValidationErrors,
+];
+
+// Validation rules for reset password
+export const validateResetPassword = [
+    body("password")
+        .isLength({ min: 8, max: 128 })
+        .withMessage("Password must be between 8 and 128 characters")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+        .withMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+    handleValidationErrors,
+];
+
+// Validation rules for change password
+export const validateChangePassword = [
+    body("currentPassword")
+        .notEmpty()
+        .withMessage("Current password is required"),
+    body("newPassword")
+        .isLength({ min: 8, max: 128 })
+        .withMessage("New password must be between 8 and 128 characters")
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+        .withMessage("New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+    handleValidationErrors,
+];
+
+// Validation rules for resend email verification
+export const validateResendEmailVerification = [
+    body("email")
+        .isEmail()
+        .normalizeEmail()
+        .withMessage("Valid email is required"),
+    handleValidationErrors,
+];
+
+// Validation rules for Google authentication
 export const validateGoogleAuth = [
     body("googleId").notEmpty().withMessage("Google ID is required"),
     body("email").isEmail().normalizeEmail().withMessage("Valid email is required"),
     body("name").trim().isLength({ min: 2, max: 50 }).withMessage("Name must be between 2 and 50 characters"),
-    body("avatar").isURL().withMessage("Valid avatar URL is required"),
+    body("avatar").optional().isURL().withMessage("Valid avatar URL is required"),
     body("role").isIn(["renter", "host"]).withMessage("Role must be either renter or host"),
     handleValidationErrors,
 ];
