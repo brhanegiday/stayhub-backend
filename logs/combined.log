@@ -112,3 +112,226 @@
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
 {"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-13 22:53:42:5342"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 07:51:29:5129"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 07:51:29:5129"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:51:47:5147"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:04:524"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:04:524"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:04:524"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:04:524"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:04:524"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:05:525"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:22:5222"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:40:5240"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/health - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:52:59:5259"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:57:50:5750"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:58:30:5830"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:58:48:5848"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-14 07:59:04:594"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c308 - IP: ::1\u001b[39m","timestamp":"2025-09-14 08:38:14:3814"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-14 08:42:55:4255"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties/68b9d398e30b04e7e328c303 - IP: ::1\u001b[39m","timestamp":"2025-09-14 08:43:09:439"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-14 08:44:27:4427"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 08:55:31:5531"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 08:55:31:5531"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:44:044"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:59:059"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:59:059"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:59:059"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:59:059"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:00:59:059"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:01:00:10"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:01:08:18"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:01:55:155"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:01:55:155"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-14 09:02:30:230"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-14 09:02:30:230"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-14 09:02:30:230"}
+{"level":"\u001b[31merror\u001b[39m","message":"\u001b[31mFile content validation error: Error: Cannot find module 'file-type' from 'src/middleware/upload.ts'\u001b[39m","timestamp":"2025-09-14 09:02:30:230"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:37:237"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:38:238"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:38:238"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:38:238"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:38:238"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:02:38:238"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:05:15:515"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:05:15:515"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:06:09:69"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:06:59:659"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:06:59:659"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:21:721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:23:723"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET / - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:30:730"}
+{"level":"\u001b[33mwarn\u001b[39m","message":"\u001b[33m404 - Route not found: / - GET - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:30:730"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /favicon.ico - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:30:730"}
+{"level":"\u001b[33mwarn\u001b[39m","message":"\u001b[33m404 - Route not found: /favicon.ico - GET - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:30:730"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:41:741"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:41:741"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:41:741"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:41:741"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:41:741"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:07:56:756"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:08:22:822"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:08:22:822"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:08:43:843"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:08:43:843"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:09:03:93"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:09:26:926"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:09:26:926"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:09:42:942"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:10:23:1023"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:11:17:1117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:11:17:1117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:11:34:1134"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:12:08:128"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:12:08:128"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:12:29:1229"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:12:58:1258"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:13:13:1313"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:15:11:1511"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:15:11:1511"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:15:40:1540"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:15:52:1552"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs.json - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:16:05:165"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:16:56:1656"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 4000 in development mode\u001b[39m","timestamp":"2025-09-14 09:29:49:2949"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:29:49:2949"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:00:300"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:00:300"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:00:300"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:00:300"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:00:300"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:30:01:301"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 09:31:11:3111"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 09:31:11:3111"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:17:3117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:17:3117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:17:3117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:17:3117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:17:3117"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 09:31:18:3118"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:30:27:3027"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:35:00:350"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:35:10:3510"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:06:396"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:06:396"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:06:396"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:06:396"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:06:396"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:07:397"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 12:39:38:3938"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:43:49:4349"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:43:49:4349"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:44:15:4415"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:44:15:4415"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:44:36:4436"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:44:36:4436"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:45:53:4553"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:45:53:4553"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:46:19:4619"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:46:19:4619"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 12:46:52:4652"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 12:46:52:4652"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:21:14:2114"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:21:14:2114"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/bookings - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:26:46:2646"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/ - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui.css - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-bundle.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-standalone-preset.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/swagger-ui-init.js - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api-docs/favicon-32x32.png - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:27:46:2746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:28:25:2825"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:31:28:3128"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:31:28:3128"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:33:02:332"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:34:36:3436"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:34:36:3436"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:35:06:356"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:35:06:356"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:35:18:3518"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:36:42:3642"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:36:42:3642"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:36:44:3644"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:39:40:3940"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:46:18:4618"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:46:18:4618"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 13:47:04:474"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 13:47:04:474"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:49:29:4929"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/login - IP: ::1\u001b[39m","timestamp":"2025-09-14 13:56:12:5612"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 14:00:14:014"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 14:00:14:014"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:06:51:651"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:06:51:651"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:07:50:750"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:31:10:3110"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:34:18:3418"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:34:18:3418"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:36:06:366"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:40:37:4037"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:41:00:410"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:41:40:4140"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:41:40:4140"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:42:14:4214"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:44:13:4413"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:48:34:4834"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:48:34:4834"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:48:55:4855"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:48:55:4855"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:53:58:5358"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 15:54:49:5449"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 15:58:09:589"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 15:58:09:589"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 16:03:55:355"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:06:58:658"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:06:58:658"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:07:36:736"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:07:36:736"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:12:36:1236"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:12:36:1236"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:14:16:1416"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:14:16:1416"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:17:21:1721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:17:21:1721"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:25:22:2522"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:25:22:2522"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:29:09:299"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:29:09:299"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 16:38:33:3833"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 16:42:49:4249"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 16:57:30:5730"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 16:57:30:5730"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/register - IP: ::1\u001b[39m","timestamp":"2025-09-14 16:57:46:5746"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/auth/verify-email?token=d1f25c54e1bd8c33ca922aa5f4580e54d3e7c86d - IP: ::1\u001b[39m","timestamp":"2025-09-14 16:58:37:5837"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 17:00:32:032"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 17:00:32:032"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/login - IP: ::1\u001b[39m","timestamp":"2025-09-14 17:00:32:032"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/login - IP: ::ffff:127.0.0.1\u001b[39m","timestamp":"2025-09-14 17:01:02:12"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mPOST /api/auth/login - IP: ::1\u001b[39m","timestamp":"2025-09-14 17:01:13:113"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?page=1&limit=12 - IP: ::1\u001b[39m","timestamp":"2025-09-14 17:01:15:115"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mGET /api/properties?search=USA&page=1 - IP: ::1\u001b[39m","timestamp":"2025-09-14 17:01:39:139"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 17:07:52:752"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 17:07:53:753"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🚀 Server running on port 5000 in development mode\u001b[39m","timestamp":"2025-09-14 17:09:21:921"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m🔒 Security features enabled: Rate limiting, File validation, Structured logging\u001b[39m","timestamp":"2025-09-14 17:09:21:921"}

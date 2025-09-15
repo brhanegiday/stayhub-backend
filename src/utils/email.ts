@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 interface EmailOptions {
     to: string;
@@ -11,18 +11,61 @@ class EmailService {
     private transporter: nodemailer.Transporter;
 
     constructor() {
-        this.transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE || 'gmail',
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
-            },
+        this.validateConfiguration();
+        this.transporter = this.createTransporter();
+    }
+
+    private validateConfiguration(): void {
+        const requiredVars = ["EMAIL_USERNAME", "EMAIL_PASSWORD"];
+        const missing = requiredVars.filter((varName) => !process.env[varName]);
+
+        if (missing.length > 0) {
+            throw new Error(`Missing required email environment variables: ${missing.join(", ")}`);
+        }
+
+        console.log("Email configuration:", {
+            service: process.env.EMAIL_SERVICE || "gmail",
+            authType: process.env.EMAIL_CLIENT_ID ? "OAuth2" : "App Password",
+            username: process.env.EMAIL_USERNAME ? "***configured***" : "NOT SET",
+            password: process.env.EMAIL_PASSWORD ? "***configured***" : "NOT SET",
+            clientId: process.env.EMAIL_CLIENT_ID ? "***configured***" : "NOT SET",
         });
+    }
+
+    private createTransporter(): nodemailer.Transporter {
+        // Check if OAuth2 credentials are provided
+        if (process.env.EMAIL_CLIENT_ID && process.env.EMAIL_CLIENT_SECRET && process.env.EMAIL_REFRESH_TOKEN) {
+            console.log("Using OAuth2 authentication for email service");
+            return nodemailer.createTransport({
+                service: process.env.EMAIL_SERVICE || "gmail",
+                auth: {
+                    type: "OAuth2",
+                    user: process.env.EMAIL_USERNAME,
+                    clientId: process.env.EMAIL_CLIENT_ID,
+                    clientSecret: process.env.EMAIL_CLIENT_SECRET,
+                    refreshToken: process.env.EMAIL_REFRESH_TOKEN,
+                },
+            });
+        } else {
+            console.log("Using App Password authentication for email service");
+            return nodemailer.createTransport({
+                service: process.env.EMAIL_SERVICE || "gmail",
+                auth: {
+                    user: process.env.EMAIL_USERNAME,
+                    pass: process.env.EMAIL_PASSWORD,
+                },
+                // Additional options for better reliability
+                pool: true,
+                maxConnections: 1,
+                rateDelta: 20000,
+                rateLimit: 5,
+            });
+        }
     }
 
     async sendEmail(options: EmailOptions): Promise<void> {
         const mailOptions = {
-            from: `${process.env.FROM_NAME || 'StayHub'} <${process.env.FROM_EMAIL || process.env.EMAIL_USERNAME}>`,
+            from: `${process.env.FROM_NAME || "StayHub"} <${process.env.FROM_EMAIL || process.env.EMAIL_USERNAME}>`,
             to: options.to,
             subject: options.subject,
             text: options.text,
@@ -30,16 +73,48 @@ class EmailService {
         };
 
         try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`Email sent to ${options.to}`);
-        } catch (error) {
-            console.error('Error sending email:', error);
-            throw error;
+            const info = await this.transporter.sendMail(mailOptions);
+            console.log(`Email sent successfully to ${options.to}. Message ID: ${info.messageId}`);
+        } catch (error: any) {
+            console.error("Email sending failed:", {
+                to: options.to,
+                subject: options.subject,
+                error: error.message,
+                code: error.code,
+                command: error.command,
+            });
+
+            // Provide more helpful error messages
+            if (error.code === "EAUTH") {
+                throw new Error(
+                    "Email authentication failed. Please check your email credentials and ensure 2FA is enabled with a valid app password."
+                );
+            } else if (error.code === "ECONNECTION") {
+                throw new Error("Failed to connect to email server. Please check your internet connection.");
+            } else if (error.code === "EMESSAGE") {
+                throw new Error("Invalid email message format.");
+            } else {
+                throw new Error(`Email sending failed: ${error.message}`);
+            }
+        }
+    }
+
+    async testConnection(): Promise<boolean> {
+        try {
+            await this.transporter.verify();
+            console.log("Email service connection verified successfully");
+            return true;
+        } catch (error: any) {
+            console.error("Email service connection failed:", {
+                error: error.message,
+                code: error.code,
+            });
+            return false;
         }
     }
 
     async sendEmailVerification(email: string, name: string, token: string): Promise<void> {
-        const verificationUrl = `${process.env.CLIENT_URL}/auth/verify-email?token=${token}`;
+        const verificationUrl = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
         const html = `
             <!DOCTYPE html>
@@ -51,7 +126,7 @@ class EmailService {
                     .button {
                         display: inline-block;
                         padding: 12px 30px;
-                        background-color: #007bff;
+                        background-color: #0082c3;
                         color: white;
                         text-decoration: none;
                         border-radius: 5px;
@@ -79,7 +154,7 @@ class EmailService {
 
         await this.sendEmail({
             to: email,
-            subject: 'Verify Your Email - StayHub',
+            subject: "Verify Your Email - StayHub",
             text: `Hi ${name},\n\nThank you for signing up for StayHub. Please verify your email address by visiting: ${verificationUrl}\n\nThis link will expire in 10 minutes.\n\nIf you didn't create an account, please ignore this email.`,
             html,
         });
@@ -130,7 +205,7 @@ class EmailService {
 
         await this.sendEmail({
             to: email,
-            subject: 'Reset Your Password - StayHub',
+            subject: "Reset Your Password - StayHub",
             text: `Hi ${name},\n\nYou recently requested to reset your password. Please reset your password by visiting: ${resetUrl}\n\nThis link will expire in 10 minutes.\n\nIf you didn't request this reset, please ignore this email.`,
             html,
         });
@@ -167,7 +242,7 @@ class EmailService {
 
         await this.sendEmail({
             to: email,
-            subject: 'Password Changed - StayHub',
+            subject: "Password Changed - StayHub",
             text: `Hi ${name},\n\nYour StayHub account password has been successfully changed.\n\nIf you didn't make this change, please contact our support team immediately.`,
             html,
         });

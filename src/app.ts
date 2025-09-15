@@ -1,13 +1,16 @@
 // src/app.ts
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 import connectDB from "./config/database";
 import logger from "./utils/logger";
 import { generalLimiter, speedLimiter, trustProxy } from "./middleware/rateLimiter";
+import { setupSwagger } from "./config/swagger";
 
 // Import routes
 import authRoutes from "./routes/auth";
@@ -64,13 +67,44 @@ app.use((req, res, next) => {
     next();
 });
 
+// Setup Swagger documentation
+setupSwagger(app);
+
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/users", userRoutes);
 
-// Health check endpoint
+/**
+ * @swagger
+ * /api/health:
+ *   get:
+ *     tags: [Health]
+ *     summary: Health check endpoint
+ *     description: Check if the API is running and healthy
+ *     responses:
+ *       200:
+ *         description: API is running successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "StayHub API is running"
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2023-01-01T00:00:00.000Z"
+ *                 environment:
+ *                   type: string
+ *                   example: "development"
+ */
 app.get("/api/health", (req, res) => {
     res.status(200).json({
         success: true,

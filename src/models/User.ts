@@ -42,8 +42,8 @@ const UserSchema = new Schema<IUser>(
     {
         googleId: {
             type: String,
-            sparse: true,
             unique: true,
+            sparse: true,
             index: true,
         },
         email: {
@@ -52,23 +52,23 @@ const UserSchema = new Schema<IUser>(
             unique: true,
             lowercase: true,
             trim: true,
-            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email"],
         },
         password: {
             type: String,
-            minlength: [6, 'Password must be at least 6 characters'],
+            minlength: [6, "Password must be at least 6 characters"],
             select: false,
         },
         name: {
             type: String,
             required: true,
             trim: true,
-            minlength: [2, 'Name must be at least 2 characters'],
-            maxlength: [50, 'Name cannot exceed 50 characters'],
+            minlength: [2, "Name must be at least 2 characters"],
+            maxlength: [50, "Name cannot exceed 50 characters"],
         },
         avatar: {
             type: String,
-            default: '',
+            default: "",
         },
         role: {
             type: String,
@@ -129,8 +129,8 @@ const UserSchema = new Schema<IUser>(
         },
         authProvider: {
             type: String,
-            enum: ['local', 'google'],
-            default: 'local',
+            enum: ["local", "google"],
+            default: "local",
         },
         lastLogin: {
             type: Date,
@@ -140,7 +140,7 @@ const UserSchema = new Schema<IUser>(
         timestamps: true,
         toJSON: {
             virtuals: true,
-            transform: function(doc, ret) {
+            transform: function (doc, ret) {
                 delete ret.password;
                 delete ret.refreshToken;
                 delete ret.emailVerificationToken;
@@ -149,7 +149,7 @@ const UserSchema = new Schema<IUser>(
                 delete ret.loginAttempts;
                 delete ret.lockUntil;
                 return ret;
-            }
+            },
         },
         toObject: { virtuals: true },
     }
@@ -172,12 +172,12 @@ UserSchema.virtual("bookings", {
 });
 
 // Pre-save middleware to hash password
-UserSchema.pre('save', async function(next) {
+UserSchema.pre("save", async function (next) {
     // Only hash the password if it has been modified (or is new)
-    if (!this.isModified('password')) return next();
+    if (!this.isModified("password")) return next();
 
     // For Google OAuth users, skip password hashing
-    if (this.authProvider === 'google' && !this.password) return next();
+    if (this.authProvider === "google" && !this.password) return next();
 
     try {
         // Hash password with cost of 12
@@ -190,9 +190,9 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Pre-save middleware to handle login attempts
-UserSchema.pre('save', function(next) {
+UserSchema.pre("save", function (next) {
     // If we have a previous value and are not modifying loginAttempts
-    if (!this.isModified('loginAttempts') && !this.isModified('lockUntil')) {
+    if (!this.isModified("loginAttempts") && !this.isModified("lockUntil")) {
         return next();
     }
 
@@ -200,7 +200,7 @@ UserSchema.pre('save', function(next) {
     if (this.lockUntil && this.lockUntil < new Date()) {
         this.set({
             loginAttempts: undefined,
-            lockUntil: undefined
+            lockUntil: undefined,
         });
     }
 
@@ -208,20 +208,17 @@ UserSchema.pre('save', function(next) {
 });
 
 // Instance method to compare password
-UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
     if (!this.password) return false;
     return bcrypt.compare(candidatePassword, this.password);
 };
 
 // Instance method to generate email verification token
-UserSchema.methods.generateEmailVerificationToken = function(): string {
-    const token = crypto.randomBytes(20).toString('hex');
+UserSchema.methods.generateEmailVerificationToken = function (): string {
+    const token = crypto.randomBytes(20).toString("hex");
 
     // Hash token and set to emailVerificationToken field
-    this.emailVerificationToken = crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
+    this.emailVerificationToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // Set expire
     this.emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
@@ -230,14 +227,11 @@ UserSchema.methods.generateEmailVerificationToken = function(): string {
 };
 
 // Instance method to generate password reset token
-UserSchema.methods.generatePasswordResetToken = function(): string {
-    const token = crypto.randomBytes(20).toString('hex');
+UserSchema.methods.generatePasswordResetToken = function (): string {
+    const token = crypto.randomBytes(20).toString("hex");
 
     // Hash token and set to passwordResetToken field
-    this.passwordResetToken = crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
+    this.passwordResetToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // Set expire
     this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
@@ -246,14 +240,11 @@ UserSchema.methods.generatePasswordResetToken = function(): string {
 };
 
 // Instance method to generate refresh token
-UserSchema.methods.generateRefreshToken = function(): string {
-    const token = crypto.randomBytes(40).toString('hex');
+UserSchema.methods.generateRefreshToken = function (): string {
+    const token = crypto.randomBytes(40).toString("hex");
 
     // Hash token and set to refreshToken field
-    this.refreshToken = crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
+    this.refreshToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // Set expire
     this.refreshTokenExpires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
@@ -262,21 +253,21 @@ UserSchema.methods.generateRefreshToken = function(): string {
 };
 
 // Instance method to check if account is locked
-UserSchema.methods.isLocked = function(): boolean {
+UserSchema.methods.isLocked = function (): boolean {
     return !!(this.lockUntil && this.lockUntil > Date.now());
 };
 
 // Instance method to increment login attempts
-UserSchema.methods.incLoginAttempts = async function(): Promise<void> {
+UserSchema.methods.incLoginAttempts = async function (): Promise<void> {
     // If we have a previous lock that has expired, restart at 1
     if (this.lockUntil && this.lockUntil < new Date()) {
         return this.updateOne({
             $set: {
-                loginAttempts: 1
+                loginAttempts: 1,
             },
             $unset: {
-                lockUntil: 1
-            }
+                lockUntil: 1,
+            },
         });
     }
 
@@ -291,32 +282,32 @@ UserSchema.methods.incLoginAttempts = async function(): Promise<void> {
 };
 
 // Static method to find user by email verification token
-UserSchema.statics.findByEmailVerificationToken = function(token: string) {
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+UserSchema.statics.findByEmailVerificationToken = function (token: string) {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     return this.findOne({
         emailVerificationToken: hashedToken,
-        emailVerificationExpires: { $gt: Date.now() }
+        emailVerificationExpires: { $gt: Date.now() },
     });
 };
 
 // Static method to find user by password reset token
-UserSchema.statics.findByPasswordResetToken = function(token: string) {
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+UserSchema.statics.findByPasswordResetToken = function (token: string) {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     return this.findOne({
         passwordResetToken: hashedToken,
-        passwordResetExpires: { $gt: Date.now() }
+        passwordResetExpires: { $gt: Date.now() },
     });
 };
 
 // Static method to find user by refresh token
-UserSchema.statics.findByRefreshToken = function(token: string) {
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+UserSchema.statics.findByRefreshToken = function (token: string) {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     return this.findOne({
         refreshToken: hashedToken,
-        refreshTokenExpires: { $gt: Date.now() }
+        refreshTokenExpires: { $gt: Date.now() },
     });
 };
 

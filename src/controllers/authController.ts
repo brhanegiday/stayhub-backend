@@ -6,11 +6,7 @@ import { generateTokenPair, verifyRefreshToken, hashToken } from "../utils/jwt";
 import { emailService } from "../utils/email";
 
 const generateTokenResponse = (user: IUser) => {
-    const { accessToken, refreshToken } = generateTokenPair(
-        user._id.toString(),
-        user.email,
-        user.role
-    );
+    const { accessToken, refreshToken } = generateTokenPair(user._id.toString(), user.email, user.role);
 
     return {
         user: {
@@ -32,8 +28,8 @@ const generateTokenResponse = (user: IUser) => {
 
 const setCookieOptions = () => ({
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict' as const,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict" as const,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 });
 
@@ -58,7 +54,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             password,
             name,
             role,
-            authProvider: 'local',
+            authProvider: "local",
             isVerified: false,
         });
 
@@ -70,7 +66,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         try {
             await emailService.sendEmailVerification(user.email, user.name, verificationToken);
         } catch (emailError) {
-            console.error('Failed to send verification email:', emailError);
+            console.error("Failed to send verification email:", emailError);
             // Don't fail registration if email fails
         }
 
@@ -104,7 +100,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         const { email, password, rememberMe } = req.body;
 
         // Find user and include password field for verification
-        const user = await User.findOne({ email, authProvider: 'local' }).select('+password +loginAttempts +lockUntil');
+        const user = await User.findOne({ email, authProvider: "local" }).select("+password +loginAttempts +lockUntil");
 
         if (!user) {
             res.status(401).json({
@@ -141,7 +137,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             res.status(403).json({
                 success: false,
                 message: "Please verify your email before logging in",
-                code: "EMAIL_NOT_VERIFIED"
+                code: "EMAIL_NOT_VERIFIED",
             });
             return;
         }
@@ -149,7 +145,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         // Reset login attempts and update last login
         await user.updateOne({
             $unset: { loginAttempts: 1, lockUntil: 1 },
-            $set: { lastLogin: new Date() }
+            $set: { lastLogin: new Date() },
         });
 
         // Generate tokens
@@ -157,7 +153,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         // Set refresh token as httpOnly cookie if remember me is checked
         if (rememberMe) {
-            res.cookie('refreshToken', tokenData.refreshToken, setCookieOptions());
+            res.cookie("refreshToken", tokenData.refreshToken, setCookieOptions());
         }
 
         res.status(200).json({
@@ -224,7 +220,7 @@ export const resendEmailVerification = async (req: Request, res: Response): Prom
     try {
         const { email } = req.body;
 
-        const user = await User.findOne({ email, authProvider: 'local' });
+        const user = await User.findOne({ email, authProvider: "local" });
 
         if (!user) {
             res.status(404).json({
@@ -298,7 +294,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
 
         // Update refresh token in cookie if it was set via cookie
         if (tokenFromCookie) {
-            res.cookie('refreshToken', tokenData.refreshToken, setCookieOptions());
+            res.cookie("refreshToken", tokenData.refreshToken, setCookieOptions());
         }
 
         res.status(200).json({
@@ -337,7 +333,7 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
         }
 
         // Check if user already exists with Google ID
-        let user = await User.findOne({ googleId, authProvider: 'google' });
+        let user = await User.findOne({ googleId, authProvider: "google" });
 
         if (user) {
             // User exists, update last login and generate tokens
@@ -359,7 +355,8 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
         if (existingUser) {
             res.status(400).json({
                 success: false,
-                message: "An account with this email already exists. Please use the existing login method or link your Google account.",
+                message:
+                    "An account with this email already exists. Please use the existing login method or link your Google account.",
             });
             return;
         }
@@ -369,9 +366,9 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
             googleId,
             email,
             name,
-            avatar: avatar || '',
+            avatar: avatar || "",
             role,
-            authProvider: 'google',
+            authProvider: "google",
             isVerified: true, // Google accounts are pre-verified
             lastLogin: new Date(),
         });
@@ -477,7 +474,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
     try {
         const { email } = req.body;
 
-        const user = await User.findOne({ email, authProvider: 'local' });
+        const user = await User.findOne({ email, authProvider: "local" });
 
         if (!user) {
             // Don't reveal if user exists or not for security
@@ -496,7 +493,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
         try {
             await emailService.sendPasswordReset(user.email, user.name, resetToken);
         } catch (emailError) {
-            console.error('Failed to send password reset email:', emailError);
+            console.error("Failed to send password reset email:", emailError);
             user.passwordResetToken = undefined;
             user.passwordResetExpires = undefined;
             await user.save();
@@ -567,7 +564,7 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
         try {
             await emailService.sendPasswordChangeNotification(user.email, user.name);
         } catch (emailError) {
-            console.error('Failed to send password change notification:', emailError);
+            console.error("Failed to send password change notification:", emailError);
             // Don't fail the reset if email fails
         }
 
@@ -600,7 +597,7 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
         }
 
         // Only allow password change for local auth users
-        if (user.authProvider !== 'local') {
+        if (user.authProvider !== "local") {
             res.status(400).json({
                 success: false,
                 message: "Password change is only available for email/password accounts",
@@ -609,7 +606,7 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
         }
 
         // Get user with password field
-        const userWithPassword = await User.findById(user._id).select('+password');
+        const userWithPassword = await User.findById(user._id).select("+password");
 
         if (!userWithPassword) {
             res.status(404).json({
@@ -638,7 +635,7 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
         try {
             await emailService.sendPasswordChangeNotification(user.email, user.name);
         } catch (emailError) {
-            console.error('Failed to send password change notification:', emailError);
+            console.error("Failed to send password change notification:", emailError);
             // Don't fail the change if email fails
         }
 
@@ -659,10 +656,10 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
 export const logout = async (req: Request, res: Response): Promise<void> => {
     try {
         // Clear refresh token cookie if it exists
-        res.clearCookie('refreshToken', {
+        res.clearCookie("refreshToken", {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
         });
 
         res.status(200).json({
