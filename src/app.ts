@@ -28,7 +28,7 @@ const app = express();
 
 // Trust proxy for rate limiting (if behind reverse proxy)
 if (trustProxy) {
-    app.set('trust proxy', trustProxy);
+    app.set("trust proxy", trustProxy);
 }
 
 // Security middleware
@@ -39,9 +39,19 @@ app.use(generalLimiter);
 app.use(speedLimiter);
 
 // CORS configuration
+const allowedOrigins = ["http://localhost:3000", "https://stayhub-kx4i.onrender.com"];
+
 app.use(
     cors({
-        origin: process.env.CLIENT_URL || "http://localhost:3000",
+        origin: function (origin, callback) {
+            // Allow requests with no origin (like mobile apps or curl)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) === -1) {
+                const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+                return callback(new Error(msg), false);
+            }
+            return callback(null, true);
+        },
         credentials: true,
     })
 );
@@ -56,8 +66,8 @@ const morganFormat = process.env.NODE_ENV === "development" ? "dev" : "combined"
 app.use(
     morgan(morganFormat, {
         stream: {
-            write: (message: string) => logger.http(message.trim())
-        }
+            write: (message: string) => logger.http(message.trim()),
+        },
     })
 );
 
@@ -117,7 +127,7 @@ app.get("/api/health", (req, res) => {
 // Global error handler with enhanced logging
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const statusCode = err.status || 500;
-    
+
     // Log error with context
     logger.error(`${statusCode} - ${err.message} - ${req.originalUrl} - ${req.method} - IP: ${req.ip}`, {
         error: err.message,
@@ -125,7 +135,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
         url: req.originalUrl,
         method: req.method,
         ip: req.ip,
-        userAgent: req.get('User-Agent'),
+        userAgent: req.get("User-Agent"),
     });
 
     res.status(statusCode).json({

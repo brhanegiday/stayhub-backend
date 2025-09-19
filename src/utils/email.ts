@@ -22,20 +22,11 @@ class EmailService {
         if (missing.length > 0) {
             throw new Error(`Missing required email environment variables: ${missing.join(", ")}`);
         }
-
-        console.log("Email configuration:", {
-            service: process.env.EMAIL_SERVICE || "gmail",
-            authType: process.env.EMAIL_CLIENT_ID ? "OAuth2" : "App Password",
-            username: process.env.EMAIL_USERNAME ? "***configured***" : "NOT SET",
-            password: process.env.EMAIL_PASSWORD ? "***configured***" : "NOT SET",
-            clientId: process.env.EMAIL_CLIENT_ID ? "***configured***" : "NOT SET",
-        });
     }
 
     private createTransporter(): nodemailer.Transporter {
         // Check if OAuth2 credentials are provided
         if (process.env.EMAIL_CLIENT_ID && process.env.EMAIL_CLIENT_SECRET && process.env.EMAIL_REFRESH_TOKEN) {
-            console.log("Using OAuth2 authentication for email service");
             return nodemailer.createTransport({
                 service: process.env.EMAIL_SERVICE || "gmail",
                 auth: {
@@ -47,7 +38,6 @@ class EmailService {
                 },
             });
         } else {
-            console.log("Using App Password authentication for email service");
             return nodemailer.createTransport({
                 service: process.env.EMAIL_SERVICE || "gmail",
                 auth: {
@@ -74,16 +64,7 @@ class EmailService {
 
         try {
             const info = await this.transporter.sendMail(mailOptions);
-            console.log(`Email sent successfully to ${options.to}. Message ID: ${info.messageId}`);
         } catch (error: any) {
-            console.error("Email sending failed:", {
-                to: options.to,
-                subject: options.subject,
-                error: error.message,
-                code: error.code,
-                command: error.command,
-            });
-
             // Provide more helpful error messages
             if (error.code === "EAUTH") {
                 throw new Error(
@@ -102,7 +83,6 @@ class EmailService {
     async testConnection(): Promise<boolean> {
         try {
             await this.transporter.verify();
-            console.log("Email service connection verified successfully");
             return true;
         } catch (error: any) {
             console.error("Email service connection failed:", {
